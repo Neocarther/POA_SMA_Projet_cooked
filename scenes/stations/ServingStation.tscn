@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://dgcsudkdbqcxp"]
+
+[ext_resource type="Script" path="res://scripts/stations/ServingStation.gd" id="1_dq67o"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1k8h6"]
+size = Vector2(64, 64)
+
+[node name="ServingStation" type="Area2D"]
+script = ExtResource("1_dq67o")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1k8h6")
+
+[node name="Visual" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+color = Color(0.2, 0.8, 0.2, 1)
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -40.0
+offset_right = 32.0
+offset_bottom = -32.0
+text = "Serving"
+horizontal_alignment = 1

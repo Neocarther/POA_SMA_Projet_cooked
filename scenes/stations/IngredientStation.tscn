@@ -1,0 +1,37 @@
+[gd_scene load_steps=3 format=3 uid="uid://bqbp1vp67u34u"]
+
+[ext_resource type="Script" path="res://scripts/stations/IngredientStation.gd" id="1_ygj0u"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_1k8h6"]
+size = Vector2(64, 64)
+
+[node name="IngredientStation" type="Area2D"]
+script = ExtResource("1_ygj0u")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_1k8h6")
+
+[node name="Visual" type="ColorRect" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -32.0
+offset_right = 32.0
+offset_bottom = 32.0
+color = Color(0.6, 0.4, 0.2, 1)
+
+[node name="Label" type="Label" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.0
+offset_top = -40.0
+offset_right = 32.0
+offset_bottom = -32.0
+text = "Ingredients"
+horizontal_alignment = 1
