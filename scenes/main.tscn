@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://ci108dlih61c5"]
+
+[ext_resource type="Script" uid="uid://di726l0x6simm" path="res://scripts/stations/cooking_station.gd" id="1_o5qli"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_0wfyh"]
+
+[node name="Main" type="Node2D"]
+
+[node name="CookingStation" type="Node2D" parent="."]
+script = ExtResource("1_o5qli")
+
+[node name="Sprite2D" type="Sprite2D" parent="CookingStation"]
+
+[node name="Area2D" type="Area2D" parent="CookingStation"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="CookingStation/Area2D"]
+shape = SubResource("RectangleShape2D_0wfyh")
