@@ -1,0 +1,44 @@
+[gd_scene load_steps=2 format=3 uid="uid://btkgs3vywk7v8"]
+
+[ext_resource type="Script" uid="uid://bnydo7okdoa08" path="res://UI.gd" id="1_b3bc3"]
+
+[node name="Ui" type="CanvasLayer"]
+script = ExtResource("1_b3bc3")
+
+[node name="TimerLabel" type="Label" parent="."]
+offset_left = 129.0
+offset_right = 169.0
+offset_bottom = 23.0
+
+[node name="ScoreLabel" type="Label" parent="."]
+offset_left = -4.0
+offset_top = -1.0
+offset_right = 36.0
+offset_bottom = 22.0
+
+[node name="ActionProgressBar" type="ProgressBar" parent="."]
+offset_right = 4.0
+offset_bottom = 27.0
+
+[node name="EndScreen" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 282.0
+offset_top = 31.0
+offset_right = 322.0
+offset_bottom = 71.0
+
+[node name="EndMessage" type="Label" parent="EndScreen"]
+layout_mode = 0
+offset_left = -32.0
+offset_top = -5.0
+offset_right = 161.0
+offset_bottom = 39.0
+
+[node name="RestartButton" type="Button" parent="EndScreen"]
+layout_mode = 0
+offset_left = -2.0
+offset_top = 40.0
+offset_right = 112.0
+offset_bottom = 73.0
+text = "RESTART"
