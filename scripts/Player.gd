@@ -5,6 +5,8 @@ extends CharacterBody2D
 @export var accel := 1200.0         # accélération
 @export var friction := 1400.0      # freinage quand pas d'input
 
+var held_element: Node = null
+
 func _physics_process(delta: float) -> void:
 	var input := Vector2.ZERO
 	input.x = (Input.get_action_strength("move_right") - Input.get_action_strength("move_left"))
@@ -18,3 +20,16 @@ func _physics_process(delta: float) -> void:
 		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
 
 	move_and_slide()
+	
+func has_element() -> bool:
+	return held_element != null
+
+func give_element() -> Node:
+	var temp = held_element
+	held_element = null
+	return temp
+
+func take_element(element: Node) -> void:
+	held_element = element
+	add_child(element)
+	element.position = Vector2.ZERO

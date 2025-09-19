@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://rx8bathrf567"]
+
+[ext_resource type="Script" uid="uid://dysi3jeovgm4f" path="res://scripts/element.gd" id="1_v31ev"]
+
+[node name="Bread" type="Node2D"]
+script = ExtResource("1_v31ev")
+is_cut = true
