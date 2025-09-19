@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://btkgs3vywk7v8"]
 
-[ext_resource type="Script" uid="uid://bnydo7okdoa08" path="res://UI.gd" id="1_b3bc3"]
+[ext_resource type="Script" uid="uid://bnydo7okdoa08" path="res://scripts/UI.gd" id="1_b3bc3"]
 
 [node name="Ui" type="CanvasLayer"]
 script = ExtResource("1_b3bc3")
@@ -11,10 +11,10 @@ offset_right = 169.0
 offset_bottom = 23.0
 
 [node name="ScoreLabel" type="Label" parent="."]
-offset_left = -4.0
-offset_top = -1.0
-offset_right = 36.0
-offset_bottom = 22.0
+anchors_preset = -1
+anchor_right = 0.014
+offset_right = 23.872
+offset_bottom = 23.0
 
 [node name="ActionProgressBar" type="ProgressBar" parent="."]
 offset_right = 4.0
