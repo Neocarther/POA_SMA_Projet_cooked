@@ -1,19 +1,38 @@
-extends "res://scripts/stations/station.gd"
+extends Station
 
-var current_ingredient = null
+@onready var progress_bar = $ProgressBar
 
+var cutting_progress: float = 0.0
+var cutting_goal: float = 10.0
+var cutting_rate: float = progress_bar.max_value / cutting_goal
+var cutting_in_progress: bool = false
 
-func _on_area_2d_area_entered(area: Area2D) -> void:
-	if player.has_something:
-		handle_element(element)
-		state = station_state.IN_USE
+func _ready() -> void:
+	add_to_group("interactable")
+	progress_bar.visible = false
 
-func _on_area_2d_area_exited(area: Area2D) -> void:
-	state = station_state.IDLE
-	
-func handle_element(element):
-	if state == station_state.IN_USE and element.is_cuttable():
-		cut(element)
+func interact(player):
+	if not has_item():
+		if player.has_item():
+			receive_item(player)
+			if _can_cut():
+				cutting_progress = 0.0
+				progress_bar.value = 0.0
+				progress_bar.visible = true
+				print(current_item.label, " is set for cutting at Cutting Station")
+			else:
+				give_item(player)
+				print()
+	elif not player.has_item():
+		if cutting_progress >= progress_bar.max_value:
+			current_item.cut()
+			print("Picked up ", current_item.label, " from Cutting Station")
+			give_item(player)
+			progress_bar.visible = false
+		else:
+			cutting_progress += cutting_rate
+			progress_bar.value = cutting_progress
+		
 
-func cut(element):
-	print("The cook is cutting " + element.name)
+func _can_cut() -> bool:
+	return current_item.is_in_group("cuttable") and not current_item.is_cut()

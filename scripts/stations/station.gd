@@ -1,12 +1,24 @@
-extends Node2D
+extends StaticBody2D
 
-enum station_state {
-	IN_USE,
-	IDLE,
-	COOKING,
-}
+class_name Station
 
-var state: station_state = station_state.IDLE
+var current_item: Node = null
 
-func handle_element(element):
-	print("Handling " + element + " at the station...")
+func interact(_player):
+	push_error("interact() must be implemented in a Station subclass")
+
+func has_item() -> bool:
+	return current_item != null
+
+func give_item(player):
+	if has_item() and not player.has_item():
+		player.add_item(current_item)
+		remove_child(current_item)
+		current_item = null
+
+func receive_item(player):
+	if not has_item():
+		var item = player.remove_item()
+		current_item = item
+		add_child(item)
+		item.position = Vector2.ZERO

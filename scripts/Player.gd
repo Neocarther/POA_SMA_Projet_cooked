@@ -1,35 +1,44 @@
-# player_2d.gd
 extends CharacterBody2D
 
-@export var max_speed := 180.0      # vitesse en px/s
-@export var accel := 1200.0         # accélération
-@export var friction := 1400.0      # freinage quand pas d'input
+var held_item: Node = null
 
-var held_element: Node = null
-
-func _physics_process(delta: float) -> void:
-	var input := Vector2.ZERO
-	input.x = (Input.get_action_strength("move_right") - Input.get_action_strength("move_left"))
-	input.y = (Input.get_action_strength("move_down")  - Input.get_action_strength("move_up"))
-
-	if input.length() > 0.0:
-		input = input.normalized()
-		var target := input * max_speed
-		velocity = velocity.move_toward(target, accel * delta)
-	else:
-		velocity = velocity.move_toward(Vector2.ZERO, friction * delta)
-
-	move_and_slide()
+var nearby_interactables = []
 	
-func has_element() -> bool:
-	return held_element != null
+func has_item() -> bool:
+	return held_item != null
 
-func give_element() -> Node:
-	var temp = held_element
-	held_element = null
-	return temp
+func add_item(item) -> void:
+	if has_item():
+		return
+	held_item = item
 
-func take_element(element: Node) -> void:
-	held_element = element
-	add_child(element)
-	element.position = Vector2.ZERO
+func remove_item() -> Node:
+	if not has_item():
+		return null
+	var removed_item = held_item
+	held_item = null
+	return removed_item
+
+func get_closest_interactable():
+	var closest = null
+	var closest_dist := INF
+	for interactable in nearby_interactables:
+		var dist = global_position.distance_to(interactable.global_position)
+		if dist < closest_dist:
+			closest = interactable
+			closest_dist = dist
+	return closest
+
+func _try_interact():
+	if not nearby_interactables.is_empty():
+		get_closest_interactable().interact(self)
+
+func _on_interaction_area_entered(area: Area2D) -> void:
+	if area.is_in_group("interactables"):
+		nearby_interactables.append(area.get_parent())
+		_try_interact()
+
+func _on_interaction_area_exited(area: Area2D) -> void:
+	var parent = area.get_parent()
+	if parent.is_in_group("interactables"):
+		nearby_interactables.erase(parent)

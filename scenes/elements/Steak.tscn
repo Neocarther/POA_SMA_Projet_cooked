@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://7dmpa4670lg"]
-
-[ext_resource type="Script" uid="uid://dysi3jeovgm4f" path="res://scripts/element.gd" id="1_r2282"]
-
-[node name="Steak" type="Node2D"]
-script = ExtResource("1_r2282")
-is_raw = true

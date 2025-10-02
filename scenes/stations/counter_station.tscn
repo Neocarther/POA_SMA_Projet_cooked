@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmcswm2qtvur4"]
+
+[ext_resource type="Script" uid="uid://cq6u2cftuow5f" path="res://scripts/stations/counter_station.gd" id="1_5c2nq"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_wdeki"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mi0u3"]
+size = Vector2(89.5, 85.75)
+
+[node name="CounterStation" type="StaticBody2D"]
+script = ExtResource("1_5c2nq")
+metadata/_custom_type_script = "uid://c3ommkr6l47rw"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(88.24999, 85.25)
+texture = SubResource("PlaceholderTexture2D_wdeki")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_mi0u3")

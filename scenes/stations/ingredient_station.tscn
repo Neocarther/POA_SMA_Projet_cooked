@@ -1,0 +1,19 @@
+[gd_scene load_steps=4 format=3 uid="uid://cg3oakmna2i2f"]
+
+[ext_resource type="Script" uid="uid://ds3bav7s858rc" path="res://scripts/stations/ingredient_station.gd" id="1_6w6nh"]
+
+[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bwk3m"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_sd1i1"]
+size = Vector2(89.5, 85.75)
+
+[node name="IngredientStation" type="StaticBody2D"]
+script = ExtResource("1_6w6nh")
+metadata/_custom_type_script = "uid://c3ommkr6l47rw"
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(88.24999, 85.25)
+texture = SubResource("PlaceholderTexture2D_bwk3m")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_sd1i1")

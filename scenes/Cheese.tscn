@@ -1,7 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctramwid2ivx2"]
-
-[ext_resource type="Script" uid="uid://dysi3jeovgm4f" path="res://scripts/element.gd" id="1_x0o8y"]
-
-[node name="Cheese" type="Node2D"]
-script = ExtResource("1_x0o8y")
-is_cut = true
