@@ -4,7 +4,7 @@ extends Station
 
 var cutting_progress: float = 0.0
 var cutting_goal: float = 10.0
-var cutting_rate: float = progress_bar.max_value / cutting_goal
+var cutting_rate: float = 100.0 / cutting_goal
 var cutting_in_progress: bool = false
 
 func _ready() -> void:

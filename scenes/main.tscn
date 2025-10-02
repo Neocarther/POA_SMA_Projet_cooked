@@ -1,23 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://ci108dlih61c5"]
+[gd_scene load_steps=5 format=3 uid="uid://ci108dlih61c5"]
 
 [ext_resource type="PackedScene" uid="uid://c86ly0sc60eb1" path="res://scenes/stations/cooking_station.tscn" id="1_tefeu"]
-[ext_resource type="PackedScene" uid="uid://up81uv22gxw7" path="res://scenes/items/Tomato.tscn" id="2_o6xl0"]
-[ext_resource type="PackedScene" uid="uid://7dmpa4670lg" path="res://scenes/items/Steak.tscn" id="3_tipki"]
-[ext_resource type="PackedScene" path="res://scenes/Cheese.tscn" id="4_85g3d"]
-[ext_resource type="PackedScene" uid="uid://rx8bathrf567" path="res://scenes/Ingredient.tscn" id="5_choun"]
-[ext_resource type="PackedScene" path="res://scenes/stations/storage_station.tscn" id="6_ya4ey"]
-
+[ext_resource type="PackedScene" uid="uid://cg3oakmna2i2f" path="res://scenes/stations/ingredient_station.tscn" id="2_sugp2"]
+[ext_resource type="Resource" uid="uid://b3paw6n8ethbb" path="res://resources/ingredients/tomato.tres" id="3_jyhfs"]
+[ext_resource type="PackedScene" uid="uid://cf2jhubpgh6w" path="res://scenes/stations/cutting_station.tscn" id="4_jyhfs"]
 
 [node name="Main" type="Node2D"]
 
 [node name="CookingStation" parent="." instance=ExtResource("1_tefeu")]
+position = Vector2(705, 109)
 
-[node name="Tomato" parent="." instance=ExtResource("2_o6xl0")]
+[node name="IngredientStation" parent="." instance=ExtResource("2_sugp2")]
+position = Vector2(376, 109)
+ingredient_data = ExtResource("3_jyhfs")
 
-[node name="Steak" parent="." instance=ExtResource("3_tipki")]
-
-[node name="Cheese" parent="." instance=ExtResource("4_85g3d")]
-
-[node name="Bread" parent="." instance=ExtResource("5_choun")]
-
-[node name="StorageStation" parent="." instance=ExtResource("6_ya4ey")]
+[node name="CuttingStation" parent="." instance=ExtResource("4_jyhfs")]
+position = Vector2(528, 109)

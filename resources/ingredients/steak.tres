@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="IngredientData" load_steps=4 format=3 uid="uid://icw3hsyadxev"]
+
+[ext_resource type="Script" uid="uid://tqapocf1fqvc" path="res://resources/ingredient_data.gd" id="1_41k33"]
+[ext_resource type="Texture2D" uid="uid://cw6dsup5tsjub" path="res://models/steak_raw.png" id="1_bv5c8"]
+[ext_resource type="Texture2D" uid="uid://blf64pqr5wytb" path="res://models/steak_cooked.png" id="2_tca8e"]
+
+[resource]
+script = ExtResource("1_41k33")
+name = "Steak"
+cookable = true
+servable = true
+base_texture = ExtResource("1_bv5c8")
+cooked_texture = ExtResource("2_tca8e")
+metadata/_custom_type_script = "uid://tqapocf1fqvc"

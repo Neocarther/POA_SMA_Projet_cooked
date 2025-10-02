@@ -13,8 +13,9 @@ func has_item() -> bool:
 func give_item(player):
 	if has_item() and not player.has_item():
 		player.add_item(current_item)
-		remove_child(current_item)
-		current_item = null
+		if self.is_ancestor_of(current_item):
+			remove_child(current_item)
+			current_item = null
 
 func receive_item(player):
 	if not has_item():
