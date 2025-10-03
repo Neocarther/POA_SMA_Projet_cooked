@@ -17,3 +17,4 @@ config/icon="res://icon.svg"
 [autoload]
 
 UI="*res://scenes/UI.tscn"
+_RecipeManager="*res://scripts/recipe_manager.gd"

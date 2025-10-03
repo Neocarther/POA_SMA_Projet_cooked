@@ -6,6 +6,7 @@ enum State {
 	CUT,
 	COOKED,
 }
+
 @onready var sprite = $Sprite2D
 @export var data: IngredientData
 var state: State = State.BASE

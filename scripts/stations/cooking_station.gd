@@ -1,6 +1,6 @@
 extends Station
 
-@onready var progress_bar = $ProgressBar
+@onready var progress_bar: ProgressBar = $ProgressBar
 
 var cooking_progress: float = 0.0
 var cooking_time: float = 10.0

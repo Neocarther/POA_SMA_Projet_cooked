@@ -1,7 +1,7 @@
 extends Resource
 class_name IngredientData
 
-@export var name: String
+@export var name: StringName
 @export var cuttable: bool
 @export var cookable: bool
 @export var servable: bool
