@@ -12,10 +12,10 @@ func _ready() -> void:
 	add_to_group("interactable")
 	progress_bar.visible = false
 
-func interact(player) -> void:
+func interact(agent) -> void:
 	if not has_item():
-		if player.has_item():
-			receive_item(player)
+		if agent.has_item():
+			receive_item(agent)
 			if _can_cook():
 				cooking_progress = 0.0
 				progress_bar.value = 0.0
@@ -24,11 +24,18 @@ func interact(player) -> void:
 				print( current_item.label, " is cooking at Cooking Station")
 			else:
 				print("Can't cook ", current_item.label)
-				give_item(player)
-	elif not is_cooking and not player.has_item():
-		progress_bar.visible = false
-		print("Picked up ", current_item.label, " from Cooking Station")
-		give_item(player)
+				give_item(agent)
+	elif not is_cooking:
+		if not agent.has_item():
+			progress_bar.visible = false
+			print("Picked up ", current_item.label, " from Cooking Station")
+			give_item(agent)
+		elif agent.item_type() == "Plate":
+			progress_bar.visible = false
+			give_item(agent)
+			agent.ingredient_to_meal()
+		elif agent.item_type() == "PlatedMeal":
+			try_make_meal(agent)
 
 func _can_cook() -> bool:
 	return current_item.is_in_group("cookable") and not current_item.is_cooked()

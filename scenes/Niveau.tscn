@@ -1,7 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://coeel2yi12pgi"]
 
-[ext_resource type="PackedScene" uid="uid://btdeo2i1xlwrf" path="res://scripts/Player.tscn" id="1_6tfea"]
-[ext_resource type="Script" uid="uid://5e1dwcpelmq" path="res://scenes/niveau.gd" id="1_uysjo"]
+[ext_resource type="PackedScene" uid="uid://btdeo2i1xlwrf" path="res://scenes/Agent.tscn" id="1_6tfea"]
+[ext_resource type="Script" path="res://scenes/niveau.gd" id="1_uysjo"]
+
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6bhn5"]
 size = Vector2(84.75, 74.5)

@@ -1,4 +1,5 @@
 extends Node2D
+class_name PlatedMeal
 
 @onready var meal: Sprite2D = $Plate/Meal
 var ingredients: Array[Ingredient]

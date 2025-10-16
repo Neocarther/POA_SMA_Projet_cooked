@@ -11,23 +11,23 @@ func _ready() -> void:
 	add_to_group("interactable")
 	progress_bar.visible = false
 
-func interact(player):
+func interact(agent):
 	if not has_item():
-		if player.has_item():
-			receive_item(player)
+		if agent.has_item():
+			receive_item(agent)
 			if _can_cut():
 				cutting_progress = 0.0
 				progress_bar.value = 0.0
 				progress_bar.visible = true
 				print(current_item.label, " is set for cutting at Cutting Station")
 			else:
-				give_item(player)
+				give_item(agent)
 				print()
-	elif not player.has_item():
+	elif not agent.has_item():
 		if cutting_progress >= progress_bar.max_value:
 			current_item.cut()
 			print("Picked up ", current_item.label, " from Cutting Station")
-			give_item(player)
+			give_item(agent)
 			progress_bar.visible = false
 		else:
 			cutting_progress += cutting_rate

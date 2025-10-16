@@ -2,6 +2,7 @@ extends CharacterBody2D
 
 @export var movement_speed: float = 4.0
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
+@onready var plated_meal_scene = preload("res://scenes/PlatedMeal.tscn")
 var held_item: Node = null
 var nearby_interactables = []
 
@@ -38,16 +39,22 @@ func _on_velocity_computed(safe_velocity: Vector2) -> void:
 func has_item() -> bool:
 	return held_item != null
 
-func add_item(item) -> void:
-	if has_item():
+func add_item(item: Node) -> void:
+	if has_item() and item_type() == "Plate":
+		remove_item()
+	elif has_item():
 		return
 	held_item = item
+	add_child(item)
+	item.position = Vector2.ZERO
 
 func remove_item() -> Node:
 	if not has_item():
 		return null
 	var removed_item = held_item
-	held_item = null
+	if self.is_ancestor_of(held_item):
+		remove_child(held_item)
+		held_item = null
 	return removed_item
 
 func get_closest_interactable():
@@ -59,6 +66,19 @@ func get_closest_interactable():
 			closest = interactable
 			closest_dist = dist
 	return closest
+
+func item_type() -> String:
+	if held_item is Ingredient and held_item.data.name == "Plate":
+		return "Plate"
+	else:
+		return held_item.get_class()
+
+func ingredient_to_meal() -> void:
+	if held_item is Ingredient:
+		var ingredient = remove_item()
+		held_item = plated_meal_scene.instantiate() as PlatedMeal
+		held_item.ingredients.append(ingredient)
+		add_child(held_item)
 
 func _try_interact():
 	if not nearby_interactables.is_empty():
