@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="RecipeData" load_steps=2 format=3 uid="uid://bubuwc5t561bb"]
+
+[ext_resource type="Script" uid="uid://8uswu7udqj30" path="res://resources/recipe_data.gd" id="1_lswh2"]
+
+[resource]
+script = ExtResource("1_lswh2")
+name = &"Steak"
+ingredients = Array[String](["steak"])
+states = Array[int]([2])
+metadata/_custom_type_script = "uid://8uswu7udqj30"
