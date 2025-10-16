@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://rjvrdxq87snw"]
+
+[ext_resource type="Script" uid="uid://cnw4mep6g8xa6" path="res://scripts/plated_meal.gd" id="1_bpsqn"]
+[ext_resource type="Texture2D" uid="uid://taybuu0hp4oh" path="res://models/plate.png" id="2_pwai8"]
+
+[node name="PlatedMeal" type="Node2D"]
+script = ExtResource("1_bpsqn")
+
+[node name="Plate" type="Sprite2D" parent="."]
+position = Vector2(168, 64)
+scale = Vector2(0.6666667, 0.6666667)
+texture = ExtResource("2_pwai8")
+
+[node name="Meal" type="Sprite2D" parent="Plate"]
