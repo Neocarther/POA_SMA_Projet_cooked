@@ -83,7 +83,7 @@ func is_recipe_valid(ingredients: Array[StringName]) -> bool:
 		var recipe_size = recipes_list[recipe].size()
 		var i = 0
 		var j = 0
-		while i < nb_ingredients && j < recipe_size:
+		while i < nb_ingredients and j < recipe_size:
 			var owned_ingredient = ingredients[i]
 			var recipe_ingredient = recipes_list[recipe][j]
 			if recipe_ingredient is StringName and owned_ingredient is StringName:
@@ -104,3 +104,23 @@ func get_sprite(ingredients: StringName) -> Sprite2D:
 		if sprite == ingredients:
 			return sprites[sprite]
 	return null
+
+func is_recipe_complete(ingredients: Array[StringName]) -> bool:
+	for recipe in recipes_list.keys():
+		var nb_ingredients = ingredients.size()
+		if nb_ingredients != recipes_list[recipe].size():
+			continue
+		for i in range(nb_ingredients) :
+			var owned_ingredient = ingredients[i]
+			var recipe_ingredient = recipes_list[recipe][i]
+			if recipe_ingredient is StringName and owned_ingredient is StringName:
+				if owned_ingredient != recipe_ingredient:
+					break
+			else:
+				push_error("Error in the implementation of recipe and ingredients, both should be StringName")
+		return true
+	return false
+
+#TODO add function to return random recipe
+
+#TODO add function to return next ingredient of recipe name: StringName by looking in the Dictionnary of recipes

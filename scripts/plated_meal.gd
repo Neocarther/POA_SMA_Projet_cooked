@@ -22,6 +22,13 @@ func add_ingredient(ingredient: Ingredient) -> void:
 	ingredients.append(ingredient)
 	_update_sprite()
 
+func is_complete() -> bool:
+	var ingredient_string_names: Array[StringName] = []
+	if not ingredients.is_empty():
+		for meal_ingredient in ingredients:
+			ingredient_string_names.append(StringName(_combine_name_and_state(meal_ingredient)))
+	return _RecipeManager.is_recipe_complete(ingredient_string_names)
+
 ## Changes the Sprite of the meal on the plate, does not change the plate
 func _update_sprite() -> void:
 	var s := PackedStringArray()

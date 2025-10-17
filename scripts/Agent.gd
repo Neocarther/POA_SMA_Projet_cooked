@@ -93,3 +93,5 @@ func _on_interaction_area_exited(area: Area2D) -> void:
 	var parent = area.get_parent()
 	if parent.is_in_group("interactables"):
 		nearby_interactables.erase(parent)
+
+#------ Agent Logic Code to manipulate the state machine and complete tasks ------#
