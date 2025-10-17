@@ -13,6 +13,22 @@ func _ready() -> void:
 
 func preload_textures():
 	sprites = {
+		"steak_cooked" = preload("uid://dwg1ccikmatit"),
+		"tomato_cut" = preload("uid://buubwye4vojn8"),
+		"cheese_base" = preload("uid://dpp6jx5850os2"),
+		"cheese_basetomato_cut" = preload("uid://blybn3myciffp"),
+		"steak_cookedtomato_cut" = preload("uid://dkohphcp0j8xs"),
+		"steak_cookedcheese_base" = preload("uid://bum8kv6urja5v"),
+		"steak_cookedcheese_basetomato_cut" = preload("uid://dfykn0mhxl4a"),
+		"bread_base" = preload("uid://drhw3mno0kfwb"),
+		"bread_basesteak_cooked" = preload("uid://0syniwtvh1gq"),
+		"bread_basesteak_cookedtomato_cut" = preload("uid://ccgcga2xeodwe"),
+		"bread_basesteak_cookedcheese_base" = preload("uid://bswtbwmahlhep"),
+		"bread_basesteak_cookedcheese_basetomato_cut" = preload("uid://40jly3umkhte"),
+		"bread_basesteak_cookedtomato_cutcheese_base" = preload("uid://40jly3umkhte"),
+		"bread_basetomato_cut" = preload("uid://mhf63t15vhhr"),
+		"bread_basecheese_base" = preload("uid://ls65cu1mx105"),
+		"bread_basecheese_basetomato_cut" = preload("uid://b6nng7drbb0l7")
 	}
 
 ## Get all recipes from the recipe resource directory and puts their names 
