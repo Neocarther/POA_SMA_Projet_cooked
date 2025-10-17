@@ -5,6 +5,7 @@ const recipes_folder_path = "res://resources/recipes/"
 
 var sprites = {}
 var recipes_list = {}
+var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
 	preload_textures()
@@ -117,6 +118,21 @@ func is_recipe_complete(ingredients: Array[StringName]) -> bool:
 		return true
 	return false
 
-#TODO add function to return random recipe
+func get_random_recipe():
+	var random_recipe_index = rng.randi_range(1, recipes_list.size())
+	for ingredient in recipes_list.keys():
+		random_recipe_index -= 1
+		if random_recipe_index == 0:
+			return ingredient
 
-#TODO add function to return next ingredient of recipe name: StringName by looking in the Dictionnary of recipes
+func get_next_ingredient(recipe: StringName, last_ingredient: StringName) -> StringName:
+	var next_ingredient = false
+	for ingredient in recipes_list[recipe]:
+		if next_ingredient == true:
+			return ingredient
+		if ingredient == last_ingredient:
+			next_ingredient = true
+	if next_ingredient == true:
+		return "recipe_complete"
+	else:
+		return "error"
