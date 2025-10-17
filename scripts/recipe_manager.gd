@@ -80,19 +80,15 @@ func get_all_recipes(path: String) -> Dictionary:
 func is_recipe_valid(ingredients: Array[StringName]) -> bool:
 	for recipe in recipes_list.keys():
 		var nb_ingredients = ingredients.size()
-		var recipe_size = recipes_list[recipe].size()
 		var i = 0
-		var j = 0
-		while i < nb_ingredients and j < recipe_size:
+		while i < nb_ingredients:
 			var owned_ingredient = ingredients[i]
-			var recipe_ingredient = recipes_list[recipe][j]
+			var recipe_ingredient = recipes_list[recipe][i]
 			if recipe_ingredient is StringName and owned_ingredient is StringName:
 				if owned_ingredient == recipe_ingredient:
-					#If two ingredient in both the recipe and the ones held match and have the same state compare the next two
-					j += 1
 					i += 1
 				else:
-					j += 1 #Compare the next ingredient in the recipe
+					break
 			else:
 				push_error("Error in the implementation of recipe and ingredients, both should be StringName")
 		if i == nb_ingredients:

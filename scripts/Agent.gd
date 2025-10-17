@@ -95,3 +95,37 @@ func _on_interaction_area_exited(area: Area2D) -> void:
 		nearby_interactables.erase(parent)
 
 #------ Agent Logic Code to manipulate the state machine and complete tasks ------#
+
+var current_recipe
+
+enum State {
+	IDLE,
+	FETCH_INGREDIENT,
+	MOVE_TO_STATION,
+}
+
+var state: State
+
+func _process(_delta: float) -> void:
+	match state:
+		State.IDLE:
+			pass
+		State.FETCH_INGREDIENT:
+			var ingredient_and_state = _RecipeManager.get_next_ingredient(recipe)
+			var ingredient = ingredient_and_state.split("_")[0]
+			ingredient_state = get_ingredient_state(ingredient_and_state.split("_")[1])
+			set_movement_target(WorldState.get_closest_element(ingredient))
+			
+
+func get_ingredient_state(ingredient_state: String):
+	match ingredient_state:
+		"base":
+			return "base"
+		"cut":
+			return "cutting_station"
+		"cooked":
+			return "cooking_station"
+		_:
+			return ""
+
+func _on_
