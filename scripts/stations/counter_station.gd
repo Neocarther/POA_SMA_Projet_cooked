@@ -2,6 +2,7 @@ extends Station
 
 func _ready() -> void:
 	add_to_group("interactable")
+	add_to_group("counter")
 
 func interact(agent):
 	if not has_item():

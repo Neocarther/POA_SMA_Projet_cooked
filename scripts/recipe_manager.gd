@@ -71,7 +71,7 @@ func get_all_recipes(path: String) -> Dictionary:
 ## Compares given combination of ingredients with the recipes available.
 ##
 ## Combination of ingredients do not need to form a whole recipe to be valid as long as 
-## they all match to at least one recipe.
+## they all strictly match to at least one recipe.
 ##
 ## Order of the ingredients in the evaluated combination is important. It will not match 
 ## with a recipe if the order is not respected even if one recipe does contain all of them. 

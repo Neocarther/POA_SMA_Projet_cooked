@@ -80,6 +80,7 @@ func ingredient_to_meal() -> void:
 		held_item.ingredients.append(ingredient)
 		add_child(held_item)
 
+## Call to interact with an Interactable in range
 func _try_interact():
 	if not nearby_interactables.is_empty():
 		get_closest_interactable().interact(self)
@@ -87,7 +88,6 @@ func _try_interact():
 func _on_interaction_area_entered(area: Area2D) -> void:
 	if area.is_in_group("interactables"):
 		nearby_interactables.append(area.get_parent())
-		_try_interact()
 
 func _on_interaction_area_exited(area: Area2D) -> void:
 	var parent = area.get_parent()
@@ -127,5 +127,3 @@ func get_ingredient_state(ingredient_state: String):
 			return "cooking_station"
 		_:
 			return ""
-
-func _on_

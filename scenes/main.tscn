@@ -8,6 +8,7 @@
 script = ExtResource("1_sugp2")
 
 [node name="Agent" parent="." instance=ExtResource("5_tbgi4")]
-position = Vector2(366, 296)
+position = Vector2(154, 309)
 
 [node name="ServingStation" parent="." instance=ExtResource("2_0wfyh")]
+position = Vector2(287, 45)
