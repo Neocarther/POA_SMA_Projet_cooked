@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://bx6xhlenoqvuq"]
 
-[ext_resource type="Script" uid="uid://dgam8nmc5rvne" path="res://scripts/serving_station.gd" id="1_hf3di"]
+[ext_resource type="Script" uid="uid://dgam8nmc5rvne" path="res://scripts/stations/serving_station.gd" id="1_hf3di"]
 
 [sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_fg7o6"]
 

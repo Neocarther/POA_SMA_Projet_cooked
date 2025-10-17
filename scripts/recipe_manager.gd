@@ -142,6 +142,8 @@ func get_random_recipe():
 			return ingredient
 
 func get_next_ingredient(recipe: StringName, last_ingredient: StringName) -> StringName:
+	if last_ingredient == "":
+		return recipes_list[recipe][0]
 	var next_ingredient = false
 	for ingredient in recipes_list[recipe]:
 		if next_ingredient == true:

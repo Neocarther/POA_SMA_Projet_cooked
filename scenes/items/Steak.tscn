@@ -4,4 +4,3 @@
 
 [node name="Steak" type="Node2D"]
 script = ExtResource("1_fxdkj")
-is_raw = true

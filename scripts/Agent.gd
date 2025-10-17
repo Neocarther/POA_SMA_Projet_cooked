@@ -18,11 +18,11 @@ func set_movement_target(movement_target: Vector2):
 	navigation_agent.set_target_position(movement_target)
 
 func _physics_process(_delta: float) -> void:
+	set_movement_target(Vector2(0, 0))
 	if NavigationServer2D.map_get_iteration_id(navigation_agent.get_navigation_map()) == 0:
 		return
 	if navigation_agent.is_navigation_finished():
 		return
-	
 	var next_path_position: Vector2 = navigation_agent.get_next_path_position()
 	var new_velocity: Vector2 = global_position.direction_to(next_path_position) * movement_speed
 	if navigation_agent.avoidance_enabled:
@@ -100,27 +100,57 @@ var current_recipe
 
 enum State {
 	IDLE,
+	GET_NEXT_INGREDIENT,
 	FETCH_INGREDIENT,
-	MOVE_TO_STATION,
+	MOVING,
 }
 
 var state: State
+var previous_state: State
+var navigation_finished = false
+var recipe: StringName
 
 func _process(_delta: float) -> void:
 	match state:
 		State.IDLE:
-			pass
+			recipe = _WorldState.get_recipe()
+			state = State.GET_NEXT_INGREDIENT
 		State.FETCH_INGREDIENT:
-			var ingredient_and_state = _RecipeManager.get_next_ingredient(recipe)
-			var ingredient = ingredient_and_state.split("_")[0]
-			ingredient_state = get_ingredient_state(ingredient_and_state.split("_")[1])
-			set_movement_target(WorldState.get_closest_element(ingredient))
+			if (navigation_finished):
+				var ingredient_and_state = _RecipeManager.get_next_ingredient(recipe,get_last_ingredient_string_name(held_item))
+				var ingredient_name = ingredient_and_state.split("_")[0]
+				
+				var station = get_station(ingredient_and_state.split("_")[1])
+				set_movement_target(_WorldState.get_closest_element(station, self))
+				previous_state = state
+				state = State.MOVING
+		State.MOVING:
+			if navigation_agent.is_navigation_finished():
+				navigation_finished = true
+				state = previous_state
 			
 
-func get_ingredient_state(ingredient_state: String):
+func get_last_ingredient_string_name(element) -> StringName:
+	var last_element
+	if (element is Ingredient):
+		last_element = element as Ingredient
+	elif (element is PlatedMeal):
+		last_element = element.ingredients[element.ingredients.size() - 1] as Ingredient
+	else:
+		return "error"
+	match last_element.state:
+		Ingredient.State.BASE:
+			return StringName(last_element.data.name + "_base")
+		Ingredient.State.CUT:
+			return StringName(last_element.data.name + "_cut")
+		Ingredient.State.COOKED:
+			return StringName(last_element.data.name + "_cooked")
+	return "error"
+
+func get_station(ingredient_state: String):
 	match ingredient_state:
 		"base":
-			return "base"
+			return "ingredient_station"
 		"cut":
 			return "cutting_station"
 		"cooked":

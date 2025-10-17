@@ -35,6 +35,9 @@ func try_make_meal(agent):
 	else:
 		give_item(agent)
 
+func get_item() -> Node:
+	return current_item
+
 func _current_item_type() -> String:
 	if current_item is Ingredient and current_item.data.name == "Plate":
 		return "Plate"
