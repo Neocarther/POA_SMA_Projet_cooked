@@ -1,0 +1,28 @@
+[gd_scene load_steps=3 format=3 uid="uid://bhlq28x3qj475"]
+
+[ext_resource type="Script" uid="uid://baq5j56jbfjoa" path="res://scripts/stations/CrateTomato.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cceiv0gr3cjh5" path="res://models/tomato_full.png" id="2"]
+
+[node name="CrateTomate" type="Node2D"]
+script = ExtResource("1")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 64.0
+offset_bottom = 64.0
+pivot_offset = Vector2(32, 32)
+color = Color(0.45387447, 0.19329971, 0.055074528, 1)
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(32, 32)
+scale = Vector2(0.6, 0.6)
+texture = ExtResource("2")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 19.0
+offset_top = 65.0
+offset_right = 47.0
+offset_bottom = 105.0
+text = "Bac"
+
+[node name="InteractNW" type="Marker2D" parent="."]
+position = Vector2(33, 39)
