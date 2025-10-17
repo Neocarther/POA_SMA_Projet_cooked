@@ -21,7 +21,7 @@ func get_closest_element(group_name, reference: Node, content = null) -> Vector2
 								
 		elif content is PlatedMeal:
 			for element in elements:
-				if element is PlatedMeal:
+				if element is Station:
 					var e = element.get_item()
 					if e is PlatedMeal:
 						if e.ingredients == content.ingredients:
