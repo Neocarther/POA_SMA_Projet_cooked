@@ -8,10 +8,10 @@ var recipes_list = {}
 var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
-	preload_textures()
+	preload_sprites()
 	recipes_list = get_all_recipes(recipes_folder_path)
 
-func preload_textures():
+func preload_sprites():
 	sprites = {
 		"steak_cooked" = preload("uid://dwg1ccikmatit"),
 		"tomato_cut" = preload("uid://buubwye4vojn8"),
@@ -64,27 +64,6 @@ func get_all_recipes(path: String) -> Dictionary:
 		push_error("Recipes resources dir not found")
 	return recipe_list
 
-#func generate_combinations(recipes_list):
-	#for recipe in recipes_list:
-		#var ingredient_list = []
-		#var nb_ingredients = recipe.ingredients.size()
-		#for i in range(nb_ingredients):
-			#match recipe.states[i]:
-				#Ingredient.State.BASE:
-					#ingredient_list.append(StringName(recipe.ingredients[i] + "_base"))
-				#Ingredient.State.CUT:
-					#ingredient_list.append(StringName(recipe.ingredients[i] + "_cut"))
-				#Ingredient.State.COOKED:
-					#ingredient_list.append(StringName(recipe.ingredients[i] + "_cooked"))
-		#ingredient_list.sort()
-		#combinations = _combinations_rec(ingredient_list, combinations)
-
-#func _combinations_rec(ingredient_list, combinations):
-	#for i in range(ingredient_list.size()):
-		#if ingredient_list[i] not in combinations.keys():
-			#combinations[ingredient_list[i]] = _combinations_rec(ingredient_list.slice(i+1), combinations[ingredient_list[i]])
-	#return combinations
-
 ## Compares given combination of ingredients with the recipes available.
 ##
 ## Combination of ingredients do not need to form a whole recipe to be valid as long as 
@@ -134,13 +113,14 @@ func is_recipe_complete(ingredients: Array[StringName]) -> bool:
 		return true
 	return false
 
-func get_random_recipe():
-	var random_recipe_index = rng.randi_range(1, recipes_list.size())
-	for ingredient in recipes_list.keys():
-		random_recipe_index -= 1
-		if random_recipe_index == 0:
-			return ingredient
+## Returns the name of a random Recipe among the list of recipes available
+func get_random_recipe() -> StringName:
+	return recipes_list.keys()[rng.randi_range(1, recipes_list.size())]
 
+## Returns the next ingredient to fetch for a specific recipe given the last ingredient 
+## currently in possession
+##
+## If there is no next ingredient, meaning the recipe is already complete, returns "recipe_complete" instead
 func get_next_ingredient(recipe: StringName, last_ingredient: StringName) -> StringName:
 	if last_ingredient == "":
 		return recipes_list[recipe][0]
