@@ -96,39 +96,98 @@ func _on_interaction_area_exited(area: Area2D) -> void:
 
 #------ Agent Logic Code to manipulate the state machine and complete tasks ------#
 
-var current_recipe
-
 enum State {
 	IDLE,
 	GET_NEXT_INGREDIENT,
-	FETCH_INGREDIENT,
+	INTERACTING,
 	MOVING,
 }
 
 var state: State
-var previous_state: State
-var navigation_finished = false
 var recipe: StringName
+var next_ingredient_and_state: StringName
+var required_ingredient_name: String
+var required_ingredient_state: String
+var ready_to_serve = false
+var previous_item: String
 
 func _process(_delta: float) -> void:
 	match state:
 		State.IDLE:
 			recipe = _WorldState.get_recipe()
-			state = State.GET_NEXT_INGREDIENT
-		State.FETCH_INGREDIENT:
-			if (navigation_finished):
-				var ingredient_and_state = _RecipeManager.get_next_ingredient(recipe,get_last_ingredient_string_name(held_item))
-				var ingredient_name = ingredient_and_state.split("_")[0]
-				
-				var station = get_station(ingredient_and_state.split("_")[1])
-				set_movement_target(_WorldState.get_closest_element(station, self))
-				previous_state = state
-				state = State.MOVING
+			_get_next_Ingredient()
+		
 		State.MOVING:
 			if navigation_agent.is_navigation_finished():
-				navigation_finished = true
-				state = previous_state
-			
+				state = State.INTERACTING
+		
+		State.INTERACTING:
+			var previous_ingredient_state = held_item.State if held_item is Ingredient else null
+			_try_interact()
+			if previous_ingredient_state == Ingredient.State.CUT and required_ingredient_state == "cooked":
+				_get_previous_item()
+			elif held_item == null and previous_item != "":
+				_fetch_ingredient()
+			elif held_item is Ingredient and held_item.get_name_state() == next_ingredient_and_state and previous_item != "":
+				_combine_items()
+			elif get_last_ingredient_string_name(held_item) == next_ingredient_and_state:
+				_get_next_Ingredient()
+			elif held_item is Ingredient:
+				if held_item.data.name == required_ingredient_name:
+					_get_next_station()
+			elif held_item is PlatedMeal or held_item != null and held_item.get_name_state() != next_ingredient_and_state:
+				_fetch_required_ingredient()
+			elif held_item == null and ready_to_serve == true:
+				ready_to_serve = false
+				state = State.IDLE
+
+func _get_next_Ingredient() -> void:
+	next_ingredient_and_state = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
+	if next_ingredient_and_state == "":
+		state = State.IDLE  # No more ingredients, go back to idle state
+		return
+	elif next_ingredient_and_state == "recipe_complete":
+		ready_to_serve = true
+		set_movement_target(_WorldState.get_closest_element("serving_station", self))
+		state = State.MOVING
+		return
+	
+	required_ingredient_name = next_ingredient_and_state.split("_")[0]
+	required_ingredient_state = next_ingredient_and_state.split("_")[1]
+	if held_item == null || required_ingredient_state == "base":
+		_fetch_ingredient()
+	else:
+		previous_item = held_item.get_name_state()
+		set_movement_target(_WorldState.get_closest_element("counter_station", self))
+		state = State.MOVING
+
+func _fetch_ingredient() -> void:
+	set_movement_target(_WorldState.get_closest_element("ingredient_station", self, required_ingredient_name))
+	state = State.MOVING
+
+func _combine_items() -> void:
+	previous_item = ""
+	set_movement_target(_WorldState.get_closest_element("interactables", self, previous_item))
+	state = State.MOVING
+
+func _get_next_station() -> void:
+	var group: String
+	if held_item is Ingredient:
+		match held_item.State:
+			Ingredient.State.BASE:
+				group = "cutting_station"
+			Ingredient.State.CUT:
+				group = "cooking_station"
+		set_movement_target(_WorldState.get_closest_element(group, self))
+
+func _get_previous_item() -> void:
+	if previous_item != "":
+		set_movement_target(_WorldState.get_closest_element("interactables", self, previous_item))
+		state = State.MOVING
+
+func _fetch_required_ingredient() -> void:
+	set_movement_target(_WorldState.get_closest_element("cooking_station", self, next_ingredient_and_state))
+	state = State.MOVING
 
 func get_last_ingredient_string_name(element) -> StringName:
 	var last_element
@@ -138,16 +197,11 @@ func get_last_ingredient_string_name(element) -> StringName:
 		last_element = element.ingredients[element.ingredients.size() - 1] as Ingredient
 	else:
 		return "error"
-	match last_element.state:
-		Ingredient.State.BASE:
-			return StringName(last_element.data.name + "_base")
-		Ingredient.State.CUT:
-			return StringName(last_element.data.name + "_cut")
-		Ingredient.State.COOKED:
-			return StringName(last_element.data.name + "_cooked")
-	return "error"
+	return StringName(last_element.get_name_state())
 
-func get_station(ingredient_state: String):
+## Returns the Station Group associated with the ingredient state given as argument
+## Stations in the group returned should be able to transform these 
+func get_station(ingredient_state: String) -> String:
 	match ingredient_state:
 		"base":
 			return "ingredient_station"
