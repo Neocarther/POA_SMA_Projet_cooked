@@ -6,9 +6,5 @@
 [node name="PlatedMeal" type="Node2D"]
 script = ExtResource("1_bpsqn")
 
-[node name="Plate" type="Sprite2D" parent="."]
-position = Vector2(168, 64)
-scale = Vector2(0.6666667, 0.6666667)
+[node name="Meal" type="Sprite2D" parent="."]
 texture = ExtResource("2_pwai8")
-
-[node name="Meal" type="Sprite2D" parent="Plate"]

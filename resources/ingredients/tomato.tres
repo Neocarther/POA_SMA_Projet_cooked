@@ -1,14 +1,13 @@
 [gd_resource type="Resource" script_class="IngredientData" load_steps=4 format=3 uid="uid://b3paw6n8ethbb"]
 
 [ext_resource type="Script" uid="uid://tqapocf1fqvc" path="res://resources/ingredient_data.gd" id="1_ksgjl"]
-[ext_resource type="Texture2D" uid="uid://bi7byaausfi7c" path="res://models/tomato_full.png" id="1_s62xv"]
+[ext_resource type="Texture2D" uid="uid://d3yxhnycf5mxu" path="res://models/tomato.png" id="1_xoas7"]
 [ext_resource type="Texture2D" uid="uid://bt1e08jsr8tvr" path="res://models/tomato_cut.png" id="2_a3d13"]
 
 [resource]
 script = ExtResource("1_ksgjl")
-name = "Tomato"
+name = "tomato"
 cuttable = true
-servable = true
-base_texture = ExtResource("1_s62xv")
+base_texture = ExtResource("1_xoas7")
 cut_texture = ExtResource("2_a3d13")
 metadata/_custom_type_script = "uid://tqapocf1fqvc"

@@ -9,6 +9,7 @@ var cutting_in_progress: bool = false
 
 func _ready() -> void:
 	add_to_group("interactable")
+	add_to_group("cutting_station")
 	progress_bar.visible = false
 
 func interact(agent):
@@ -19,14 +20,14 @@ func interact(agent):
 				cutting_progress = 0.0
 				progress_bar.value = 0.0
 				progress_bar.visible = true
-				print(current_item.label, " is set for cutting at Cutting Station")
+				print(current_item.get_item_name(), " is set for cutting at Cutting Station")
 			else:
 				give_item(agent)
 				print()
 	elif not agent.has_item():
 		if cutting_progress >= progress_bar.max_value:
 			current_item.cut()
-			print("Picked up ", current_item.label, " from Cutting Station")
+			print("Picked up ", current_item.get_item_name(), " from Cutting Station")
 			give_item(agent)
 			progress_bar.visible = false
 		else:

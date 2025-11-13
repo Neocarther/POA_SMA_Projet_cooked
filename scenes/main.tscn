@@ -1,14 +1,66 @@
-[gd_scene load_steps=4 format=3 uid="uid://ci108dlih61c5"]
+[gd_scene load_steps=15 format=3 uid="uid://ci108dlih61c5"]
 
 [ext_resource type="Script" uid="uid://bdg5ejg8lhcsl" path="res://scripts/main.gd" id="1_sugp2"]
 [ext_resource type="PackedScene" uid="uid://bx6xhlenoqvuq" path="res://scenes/stations/serving_station.tscn" id="2_0wfyh"]
+[ext_resource type="PackedScene" uid="uid://btkgs3vywk7v8" path="res://scenes/UI.tscn" id="4_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://c86ly0sc60eb1" path="res://scenes/stations/cooking_station.tscn" id="4_ya4ey"]
+[ext_resource type="PackedScene" uid="uid://cmcswm2qtvur4" path="res://scenes/stations/counter_station.tscn" id="5_eb6dy"]
 [ext_resource type="PackedScene" uid="uid://btdeo2i1xlwrf" path="res://scenes/Agent.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://cg3oakmna2i2f" path="res://scenes/stations/ingredient_station.tscn" id="6_trceg"]
+[ext_resource type="Resource" uid="uid://b8edj1fx221wp" path="res://resources/ingredients/plate.tres" id="7_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://cf2jhubpgh6w" path="res://scenes/stations/cutting_station.tscn" id="8_jkv2x"]
+[ext_resource type="Resource" uid="uid://css7x1msjdt0s" path="res://resources/ingredients/bread.tres" id="9_jbj1t"]
+[ext_resource type="Resource" uid="uid://icw3hsyadxev" path="res://resources/ingredients/steak.tres" id="10_eb6dy"]
+[ext_resource type="Resource" uid="uid://b3paw6n8ethbb" path="res://resources/ingredients/tomato.tres" id="11_trceg"]
+[ext_resource type="Resource" uid="uid://b4wbqqjpc8fsa" path="res://resources/ingredients/cheese.tres" id="12_a8y0u"]
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_trceg"]
+vertices = PackedVector2Array(1046, 542, 106, 542, 106, 234, 1046, 234)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(1056, 488, 1056, 552, 96, 552, 96, 224, 1056, 224)])
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_sugp2")
 
-[node name="Agent" parent="." instance=ExtResource("5_tbgi4")]
-position = Vector2(154, 309)
+[node name="Ui" parent="." instance=ExtResource("4_tbgi4")]
 
 [node name="ServingStation" parent="." instance=ExtResource("2_0wfyh")]
-position = Vector2(287, 45)
+position = Vector2(1104, 440)
+
+[node name="CookingStation" parent="." instance=ExtResource("4_ya4ey")]
+position = Vector2(432, 176)
+
+[node name="CounterStation" parent="." instance=ExtResource("5_eb6dy")]
+position = Vector2(528, 176)
+
+[node name="IngredientStation" parent="." instance=ExtResource("6_trceg")]
+position = Vector2(240, 176)
+ingredient_data = ExtResource("7_a8y0u")
+
+[node name="CuttingStation" parent="." instance=ExtResource("8_jkv2x")]
+position = Vector2(624, 176)
+
+[node name="CounterStation2" parent="." instance=ExtResource("5_eb6dy")]
+position = Vector2(336, 176)
+
+[node name="IngredientStation2" parent="." instance=ExtResource("6_trceg")]
+position = Vector2(48, 336)
+ingredient_data = ExtResource("9_jbj1t")
+
+[node name="IngredientStation3" parent="." instance=ExtResource("6_trceg")]
+position = Vector2(48, 432)
+ingredient_data = ExtResource("10_eb6dy")
+
+[node name="IngredientStation4" parent="." instance=ExtResource("6_trceg")]
+position = Vector2(240, 600)
+ingredient_data = ExtResource("11_trceg")
+
+[node name="IngredientStation5" parent="." instance=ExtResource("6_trceg")]
+position = Vector2(792, 600)
+ingredient_data = ExtResource("12_a8y0u")
+
+[node name="Agent" parent="." instance=ExtResource("5_tbgi4")]
+position = Vector2(248, 328)
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_trceg")

@@ -5,6 +5,6 @@
 
 [resource]
 script = ExtResource("1_bn8d2")
-name = "Plate"
+name = "plate"
 base_texture = ExtResource("1_dh1ua")
 metadata/_custom_type_script = "uid://tqapocf1fqvc"

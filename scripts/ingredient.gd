@@ -1,4 +1,4 @@
-extends Node
+extends Item
 class_name Ingredient
 
 enum State {
@@ -12,11 +12,15 @@ enum State {
 var state: State = State.BASE
 
 func _ready() -> void:
-	if data.cuttable:
-		get_tree().add_to_group("cuttable")
-	elif data.cookable:
-		get_tree().add_to_group("cookable")
 	_update_texture()
+
+@warning_ignore("shadowed_variable")
+func init(data: IngredientData) -> void:
+	self.data = data
+	if data.cuttable:
+		self.add_to_group("cuttable")
+	elif data.cookable:
+		self.add_to_group("cookable")
 
 func _update_texture() -> void:
 	match state:
@@ -29,20 +33,25 @@ func _update_texture() -> void:
 
 func _set_state(new_state: State) -> void:
 	state = new_state
-	name = get_name_state()
 	_update_texture()
+
+func is_cut() -> bool:
+	return state == State.CUT
+
+func is_cooked() -> bool:
+	return state == State.COOKED
 
 func cut() -> void:
 	if data.cookable:
-		get_tree().add_to_group("cookable")
-	get_tree().remove_from_group("cuttable")
+		add_to_group("cookable")
+	remove_from_group("cuttable")
 	_set_state(State.CUT)
 
 func cook() -> void:
-	get_tree().remove_from_group("cookable")
+	remove_from_group("cookable")
 	_set_state(State.COOKED)
 
-func get_name_state() -> String:
+func get_item_name() -> String:
 	match state:
 		State.BASE:
 			return data.name + "_base"

@@ -5,6 +5,6 @@
 [resource]
 script = ExtResource("1_lj81o")
 name = &"Burger"
-ingredients = Array[String](["bread", "steak", "cheese", "tomato"])
-states = Array[int]([0, 2, 0, 1])
+ingredients = Array[String](["plate", "bread", "steak", "cheese", "tomato"])
+states = Array[int]([0, 0, 2, 0, 1])
 metadata/_custom_type_script = "uid://8uswu7udqj30"

@@ -13,22 +13,24 @@ func register_station(station: Node) -> void:
 ## content can either be a String, StringName or an item with a name property
 func get_closest_element(group_name, reference: Node, content = null) -> Vector2i:
 	var elements = _get_elements(group_name)
+	print(group_name)
 	var closest_element = reference
 	var closest_distance = INF
 	for element in elements:
 		if content != null and element is Station:
-			var station_content = element.current_item()
+			var station_content = element.current_item
 			if content is String or content is StringName:
-				if content != station_content.name:
+				if content != station_content.get_item_name():
+					print(content + " " + station_content.get_item_name())
 					continue
-			elif content.name != station_content.name:
+			elif content is Item and content.get_item_name() != station_content.get_item_name():
 				continue
 				
 		var distance = reference.global_position.distance_to(element.global_position)
 		if distance < closest_distance:
 			closest_distance = distance
 			closest_element = element
-	
+	print(closest_element.global_position)
 	return closest_element.global_position
 
 func get_recipe() -> StringName:

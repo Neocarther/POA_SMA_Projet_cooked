@@ -1,7 +1,8 @@
 extends Station
 
 func _ready() -> void:
-	add_to_group("interactable")
+	self.add_to_group("interactable")
+	add_to_group("serving_station")
 
 func interact(agent) -> void:
 	if not agent.has_item():

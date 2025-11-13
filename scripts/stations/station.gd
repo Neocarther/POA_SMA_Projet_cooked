@@ -4,6 +4,9 @@ class_name Station
 
 var current_item: Node = null
 
+func _ready() -> void:
+	_WorldState.register_station(self)
+
 func interact(_agent):
 	push_error("interact() must be implemented in a Station subclass")
 
@@ -12,17 +15,17 @@ func has_item() -> bool:
 
 func give_item(agent):
 	if has_item() and not agent.has_item():
-		agent.add_item(current_item)
+		var item_given = current_item
 		if self.is_ancestor_of(current_item):
 			remove_child(current_item)
 			current_item = null
+		agent.add_item(item_given)
 
 func receive_item(agent):
 	if not has_item():
 		var item = agent.remove_item()
 		current_item = item
 		add_child(item)
-		item.position = Vector2.ZERO
 
 func try_make_meal(agent):
 	var ingredient = current_item as Ingredient

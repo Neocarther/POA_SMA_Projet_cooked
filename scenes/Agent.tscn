@@ -1,11 +1,10 @@
 [gd_scene load_steps=5 format=3 uid="uid://btdeo2i1xlwrf"]
 
 [ext_resource type="Script" uid="uid://b1chp6yeu3i68" path="res://scripts/Agent.gd" id="1_xhfnw"]
+[ext_resource type="Texture2D" uid="uid://clvb3oofbxhbx" path="res://models/cook.png" id="2_7e1ma"]
 
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_p0vlq"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_62e2m"]
-size = Vector2(56.5, 58.5)
+[sub_resource type="CircleShape2D" id="CircleShape2D_7e1ma"]
+radius = 24.33105
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
 radius = 79.30952
@@ -13,13 +12,13 @@ radius = 79.30952
 [node name="Agent" type="CharacterBody2D"]
 script = ExtResource("1_xhfnw")
 
-[node name="PlaceHolderSprite" type="Sprite2D" parent="."]
-position = Vector2(-9.536743e-07, -2.861023e-06)
-scale = Vector2(64, 63.999996)
-texture = SubResource("PlaceholderTexture2D_p0vlq")
+[node name="Sprite" type="Sprite2D" parent="."]
+scale = Vector2(2, 2)
+texture = ExtResource("2_7e1ma")
 
 [node name="CollisionBox" type="CollisionShape2D" parent="."]
-shape = SubResource("RectangleShape2D_62e2m")
+position = Vector2(0, 4)
+shape = SubResource("CircleShape2D_7e1ma")
 
 [node name="InteractionArea" type="Area2D" parent="."]
 
@@ -27,6 +26,7 @@ shape = SubResource("RectangleShape2D_62e2m")
 shape = SubResource("CircleShape2D_p0vlq")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+debug_enabled = true
 
 [connection signal="area_entered" from="InteractionArea" to="." method="_on_interaction_area_entered"]
 [connection signal="area_exited" from="InteractionArea" to="." method="_on_interaction_area_exited"]

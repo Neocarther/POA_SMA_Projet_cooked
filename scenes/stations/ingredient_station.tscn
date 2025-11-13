@@ -1,19 +1,27 @@
-[gd_scene load_steps=4 format=3 uid="uid://cg3oakmna2i2f"]
+[gd_scene load_steps=5 format=3 uid="uid://cg3oakmna2i2f"]
 
 [ext_resource type="Script" uid="uid://ds3bav7s858rc" path="res://scripts/stations/ingredient_station.gd" id="1_6w6nh"]
-
-[sub_resource type="PlaceholderTexture2D" id="PlaceholderTexture2D_bwk3m"]
+[ext_resource type="Texture2D" uid="uid://pxdm4ta5bwgl" path="res://models/ingredient_box.png" id="2_bwk3m"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_sd1i1"]
 size = Vector2(89.5, 85.75)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_bwk3m"]
+radius = 88.0
 
 [node name="IngredientStation" type="StaticBody2D"]
 script = ExtResource("1_6w6nh")
 metadata/_custom_type_script = "uid://c3ommkr6l47rw"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(88.24999, 85.25)
-texture = SubResource("PlaceholderTexture2D_bwk3m")
+[node name="Counter" type="Sprite2D" parent="."]
+texture = ExtResource("2_bwk3m")
+
+[node name="Ingredient" type="Sprite2D" parent="Counter"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sd1i1")
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+shape = SubResource("CircleShape2D_bwk3m")

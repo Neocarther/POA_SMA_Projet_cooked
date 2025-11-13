@@ -115,7 +115,7 @@ func is_recipe_complete(ingredients: Array[StringName]) -> bool:
 
 ## Returns the name of a random Recipe among the list of recipes available
 func get_random_recipe() -> StringName:
-	return recipes_list.keys()[rng.randi_range(1, recipes_list.size())]
+	return recipes_list.keys()[rng.randi_range(0, recipes_list.size() - 1)]
 
 ## Returns the next ingredient to fetch for a specific recipe given the last ingredient 
 ## currently in possession
@@ -126,11 +126,11 @@ func get_next_ingredient(recipe: StringName, last_ingredient: StringName) -> Str
 		return recipes_list[recipe][0]
 	var next_ingredient = false
 	for ingredient in recipes_list[recipe]:
-		if next_ingredient == true:
+		if next_ingredient:
 			return ingredient
 		if ingredient == last_ingredient:
 			next_ingredient = true
-	if next_ingredient == true:
+	if next_ingredient:
 		return "recipe_complete"
 	else:
 		return "error"

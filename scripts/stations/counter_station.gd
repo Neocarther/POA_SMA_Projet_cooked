@@ -2,13 +2,13 @@ extends Station
 
 func _ready() -> void:
 	add_to_group("interactable")
-	add_to_group("counter")
+	add_to_group("counter_station")
 
 func interact(agent):
 	if not has_item():
 		if agent.has_item():
 			receive_item(agent)
-			print(current_item.label, " has been placed on the Counter Station")
+			print(current_item.get_item_name(), " has been placed on the Counter Station")
 		else:
 			print("Need to hold item to place it on the Counter Station")
 	elif _current_item_type() == "PlatedMeal":
