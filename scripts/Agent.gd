@@ -1,9 +1,9 @@
 extends CharacterBody2D
 
-@export var movement_speed: float = 500.0
+@export var movement_speed: float = 800.0
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var plated_meal_scene = preload("res://scenes/PlatedMeal.tscn")
-var held_item: Node = null
+var held_item: Item = null
 var nearby_interactables = []
 
 #------ Navigation Code for the Agent to move around the world -------#
@@ -70,7 +70,7 @@ func item_type() -> String:
 	if held_item is Ingredient and held_item.data.name == "Plate":
 		return "Plate"
 	else:
-		return held_item.get_class()
+		return held_item.get_class_name()
 
 func ingredient_to_meal() -> void:
 	if held_item is Ingredient:
@@ -99,96 +99,93 @@ enum State {
 	IDLE,
 	INTERACTING,
 	MOVING,
-	CUTTING,
 }
 
 signal order_completed(recipe)
 
-var state: State
-var recipe: StringName
-var next_ingredient_and_state: StringName
-var required_ingredient_name: String
-var required_ingredient_state: String
-var ready_to_serve = false
+var state: State ##State of the Agent, can be IDLE, INTERACTING or MOVING
+var recipe: StringName ##Name of the current recipe being prepared by the agent
+var required_ingredient: StringName ##Name and state of the ingredient required for the next step of the recipe
+var required_ingredient_name: String ##Name of the ingredient required for the next step of the recipe
+var required_ingredient_state: String ##State of the ingredient required for the next step of the recipe
+var order_served: bool = false
 var previous_item: String
-var interaction_interval: float = 0.0
+var interaction_interval: float = 0.0  ##Used to set the minimum interval between 2 interactions in seconds
+var need_fetch: bool = false
+var item_cooking: bool = false
+var cooking_item: String
 
 func _process(_delta: float) -> void:
 	interaction_interval += _delta
-	if interaction_interval <= 0.5:
+	if interaction_interval <= 0.3:
 		return
 	else:
 		interaction_interval = 0.0
-	print(state)
 	match state:
 		State.IDLE:
 			recipe = _WorldState.get_recipe()
-			_get_next_Ingredient()
+			_get_next_step()
 		
 		State.MOVING:
 			if navigation_agent.is_navigation_finished():
 				state = State.INTERACTING
 		
 		State.INTERACTING:
-			var previous_ingredient_state: Ingredient.State = held_item.state if held_item is Ingredient else Ingredient.State.BASE
 			_try_interact()
-			if previous_ingredient_state == Ingredient.State.CUT and required_ingredient_state == "cooked":
-				_get_previous_item()
-			elif held_item == null and previous_item != "":
+			if held_item == null and need_fetch:
 				_fetch_ingredient()
-			elif held_item is Ingredient and held_item.get_item_name() == next_ingredient_and_state and previous_item != "":
+			elif held_item != null and (held_item.get_item_name() == required_ingredient or item_cooking) and previous_item != "":
 				_combine_items()
-			elif get_last_ingredient_string_name(held_item) == next_ingredient_and_state:
-				_get_next_Ingredient()
-			elif held_item is Ingredient:
-				if held_item.data.name == required_ingredient_name:
-					_get_next_station()
-			elif held_item is PlatedMeal or held_item != null and held_item.get_item_name() != next_ingredient_and_state:
-				_fetch_required_ingredient()
-			elif held_item == null and ready_to_serve == true:
+				item_cooking = false
+			elif get_last_ingredient_string_name(held_item) == required_ingredient and previous_item == "":
+				_get_next_step()
+			elif held_item is Ingredient and held_item.data.name == required_ingredient_name and held_item.get_state() != required_ingredient_state :
+				_get_next_station()
+			elif held_item == null and item_cooking:
+				_fetch_cooking_item()
+			elif order_served == true:
 				order_completed.emit(recipe)
-				ready_to_serve = false
+				order_served = false
 				state = State.IDLE
-		
-		State.CUTTING:
-			_try_interact()
-			if held_item != null:
-				if held_item.get_item_name() == next_ingredient_and_state:
-					if previous_item != "":
-						_combine_items()
-					else:
-						_get_next_Ingredient()
 
-func _get_next_Ingredient() -> void:
-	next_ingredient_and_state = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
-	print(next_ingredient_and_state)
-	if next_ingredient_and_state == "":
+func _get_next_step() -> void:
+	required_ingredient = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
+	print(required_ingredient)
+	if required_ingredient == "":
 		state = State.IDLE  # No more ingredients, go back to idle state
 		return
-	elif next_ingredient_and_state == "recipe_complete":
-		ready_to_serve = true
+	elif required_ingredient == "recipe_complete":
 		set_movement_target(_WorldState.get_closest_element("serving_station", self))
+		order_served = true
 		state = State.MOVING
 		return
 	
-	required_ingredient_name = next_ingredient_and_state.split("_")[0]
-	required_ingredient_state = next_ingredient_and_state.split("_")[1]
-	if held_item == null and required_ingredient_state == "base":
-		_fetch_ingredient()
+	required_ingredient_name = required_ingredient.split("_")[0]
+	required_ingredient_state = required_ingredient.split("_")[1]
+	if held_item == null:
 		print("fetching...")
+		_fetch_ingredient()
 	else:
 		previous_item = held_item.get_item_name()
 		set_movement_target(_WorldState.get_closest_element("counter_station", self))
+		need_fetch = true
 		state = State.MOVING
 
 func _fetch_ingredient() -> void:
 	set_movement_target(_WorldState.get_closest_element("ingredient_station", self, required_ingredient_name + "_base"))
+	need_fetch = false
 	state = State.MOVING
 
 func _combine_items() -> void:
-	previous_item = ""
-	set_movement_target(_WorldState.get_closest_element("interactable", self, previous_item))
-	state = State.MOVING
+	if previous_item != "":
+		var pos1 = _WorldState.get_closest_element("counter_station", self, previous_item)
+		var pos2 = _WorldState.get_closest_element("cooking_station", self, previous_item)
+		if self.global_position.distance_to(pos1) > 10 and self.global_position.distance_to(pos1) < self.global_position.distance_to(pos2) or self.global_position.distance_to(pos2) < 10:
+			set_movement_target(pos1)
+		else:
+			set_movement_target(pos2)
+		previous_item = ""
+		state = State.MOVING
 
 func _get_next_station() -> void:
 	var group: String
@@ -198,16 +195,16 @@ func _get_next_station() -> void:
 				group = "cutting_station"
 			Ingredient.State.CUT:
 				group = "cooking_station"
+				item_cooking = true
+				cooking_item = held_item.get_item_name()
 		set_movement_target(_WorldState.get_closest_element(group, self))
 		state = State.MOVING
 
-func _get_previous_item() -> void:
-	if previous_item != "":
-		set_movement_target(_WorldState.get_closest_element("interactable", self, previous_item))
-		state = State.MOVING
-
-func _fetch_required_ingredient() -> void:
-	set_movement_target(_WorldState.get_closest_element("cooking_station", self, next_ingredient_and_state))
+func _fetch_cooking_item() -> void:
+	set_movement_target(_WorldState.get_closest_element("interactable", self, previous_item))
+	previous_item = cooking_item
+	print(previous_item, cooking_item)
+	print(item_cooking)
 	state = State.MOVING
 
 func get_last_ingredient_string_name(element) -> StringName:
@@ -215,6 +212,8 @@ func get_last_ingredient_string_name(element) -> StringName:
 	if (element is Ingredient):
 		last_element = element as Ingredient
 	elif (element is PlatedMeal):
+		if element.ingredients.size() == 0:
+			return "plate_base"
 		last_element = element.ingredients[element.ingredients.size() - 1] as Ingredient
 	else:
 		return ""

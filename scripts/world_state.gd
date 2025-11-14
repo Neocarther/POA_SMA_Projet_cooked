@@ -38,9 +38,12 @@ func get_closest_element(group_name, reference: Node, content = null) -> Vector2
 	return closest_element.global_position
 
 func get_recipe() -> StringName:
-	var recipe = _task_list.keys()[0]
-	_task_list.erase(recipe)
-	return recipe
+	if _task_list.size() != 0:
+		var recipe = _task_list.keys()[0]
+		_task_list.erase(recipe)
+		return recipe
+	else:
+		return ""
 
 func add_task(recipe: StringName, time: float) -> void:
 	_task_list[recipe] = time

@@ -14,6 +14,7 @@ func interact(agent) -> void:
 			if parent.has_method("update_score_and_objectives"):
 				parent.update_score_and_objectives(current_item)
 				remove_child(current_item)
+				current_item = null
 		else:
 			give_item(agent)
 	else:

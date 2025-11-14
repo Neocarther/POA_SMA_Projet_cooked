@@ -20,6 +20,7 @@ func _ready():
 	if main:
 		main.connect("score_updated",_on_score_updated)
 		main.connect("order_added", _on_order_added)
+		main.connect("order_completed", _on_order_completed)
 	else:
 		push_warning("Main node not found — signals not connected")
 
@@ -61,6 +62,13 @@ func _update_order_timer(order_label: Label, order: Order) -> void:
 	if order.timer.time_left == 0:
 		order_labels.erase(order_label)
 		order_label.queue_free()
+
+func _on_order_completed(order: Order) -> void:
+	for order_label in order_labels.keys():
+		if order_labels[order_label].id == order.id:
+			order_labels.erase(order_label)
+			order_label.queue_free()
+			return
 
 # -------- Fin de partie --------
 func _on_game_over():

@@ -29,6 +29,7 @@ func receive_item(agent):
 
 func try_make_meal(agent):
 	var ingredient = current_item as Ingredient
+	current_item = null
 	receive_item(agent)
 	if current_item is PlatedMeal and current_item.can_add(ingredient):
 		current_item.add_ingredient(ingredient)
@@ -42,7 +43,7 @@ func get_item() -> Node:
 	return current_item
 
 func _current_item_type() -> String:
-	if current_item is Ingredient and current_item.data.name == "Plate":
+	if current_item is Ingredient and current_item.data.name == "plate":
 		return "Plate"
 	else:
-		return current_item.get_class()
+		return current_item.get_class_name()

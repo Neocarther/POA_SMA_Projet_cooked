@@ -60,3 +60,16 @@ func get_item_name() -> String:
 		State.COOKED:
 			return data.name + "_cooked"
 	return ""
+
+func get_state() -> String:
+	match state:
+		State.BASE:
+			return "base"
+		State.CUT:
+			return "cut"
+		State.COOKED:
+			return "cooked"
+	return ""
+
+func get_class_name():
+	return "Ingredient"

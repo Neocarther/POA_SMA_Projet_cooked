@@ -2,6 +2,7 @@ extends Node2D
 
 signal score_updated(score_diff)
 signal order_added(order)
+signal order_completed(order)
 
 var orders: Array[Order]
 var order_counter: int = 0
@@ -47,6 +48,6 @@ func _on_order_completed(recipe: StringName) -> void:
 	for order in orders:
 		if order.recipe_name == recipe:
 			orders.erase(order)
-			score_updated.emit(10)
+			order_completed.emit(order)
 			return
 	score_updated.emit(0)

@@ -13,22 +13,22 @@ func _ready() -> void:
 
 func preload_sprites():
 	sprites = {
-		"steak_cooked" = preload("uid://dwg1ccikmatit"),
-		"tomato_cut" = preload("uid://buubwye4vojn8"),
-		"cheese_base" = preload("uid://dpp6jx5850os2"),
-		"cheese_basetomato_cut" = preload("uid://blybn3myciffp"),
-		"steak_cookedtomato_cut" = preload("uid://dkohphcp0j8xs"),
-		"steak_cookedcheese_base" = preload("uid://bum8kv6urja5v"),
-		"steak_cookedcheese_basetomato_cut" = preload("uid://dfykn0mhxl4a"),
-		"bread_base" = preload("uid://drhw3mno0kfwb"),
-		"bread_basesteak_cooked" = preload("uid://0syniwtvh1gq"),
-		"bread_basesteak_cookedtomato_cut" = preload("uid://ccgcga2xeodwe"),
-		"bread_basesteak_cookedcheese_base" = preload("uid://bswtbwmahlhep"),
-		"bread_basesteak_cookedcheese_basetomato_cut" = preload("uid://40jly3umkhte"),
-		"bread_basesteak_cookedtomato_cutcheese_base" = preload("uid://40jly3umkhte"),
-		"bread_basetomato_cut" = preload("uid://mhf63t15vhhr"),
-		"bread_basecheese_base" = preload("uid://ls65cu1mx105"),
-		"bread_basecheese_basetomato_cut" = preload("uid://b6nng7drbb0l7")
+		"plate_basesteak_cooked" = preload("uid://dwg1ccikmatit"),
+		"plate_basetomato_cut" = preload("uid://buubwye4vojn8"),
+		"plate_basecheese_base" = preload("uid://dpp6jx5850os2"),
+		"plate_basecheese_basetomato_cut" = preload("uid://blybn3myciffp"),
+		"plate_basesteak_cookedtomato_cut" = preload("uid://dkohphcp0j8xs"),
+		"plate_basesteak_cookedcheese_base" = preload("uid://bum8kv6urja5v"),
+		"plate_basesteak_cookedcheese_basetomato_cut" = preload("uid://dfykn0mhxl4a"),
+		"plate_basebread_base" = preload("uid://drhw3mno0kfwb"),
+		"plate_basebread_basesteak_cooked" = preload("uid://0syniwtvh1gq"),
+		"plate_basebread_basesteak_cookedtomato_cut" = preload("uid://ccgcga2xeodwe"),
+		"plate_basebread_basesteak_cookedcheese_base" = preload("uid://bswtbwmahlhep"),
+		"plate_basebread_basesteak_cookedcheese_basetomato_cut" = preload("uid://40jly3umkhte"),
+		"plate_basebread_basesteak_cookedtomato_cutcheese_base" = preload("uid://40jly3umkhte"),
+		"plate_basebread_basetomato_cut" = preload("uid://mhf63t15vhhr"),
+		"plate_basebread_basecheese_base" = preload("uid://ls65cu1mx105"),
+		"plate_basebread_basecheese_basetomato_cut" = preload("uid://b6nng7drbb0l7")
 	}
 
 ## Get all recipes from the recipe resource directory and puts their names 
@@ -91,11 +91,11 @@ func is_recipe_valid(ingredients: Array[StringName]) -> bool:
 			return true
 	return false
 
-func get_sprite(ingredients: StringName) -> Sprite2D:
+func get_sprite(ingredients: StringName) -> Texture2D:
 	for sprite in sprites.keys():
 		if sprite == ingredients:
 			return sprites[sprite]
-	return null
+	return preload("uid://taybuu0hp4oh")
 
 func is_recipe_complete(ingredients: Array[StringName]) -> bool:
 	for recipe in recipes_list.keys():

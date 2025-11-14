@@ -30,12 +30,11 @@ func interact(agent) -> void:
 				print("Can't cook ", current_item.get_item_name())
 				give_item(agent)
 	elif not is_cooking:
+		progress_bar.visible = false
 		if not agent.has_item():
-			progress_bar.visible = false
 			print("Picked up ", current_item.get_item_name(), " from Cooking Station")
 			give_item(agent)
 		elif agent.item_type() == "Plate":
-			progress_bar.visible = false
 			give_item(agent)
 			agent.ingredient_to_meal()
 		elif agent.item_type() == "PlatedMeal":
@@ -51,6 +50,7 @@ func _start_cooking() -> void:
 		#Create timer for the cooking time
 		var timer = Timer.new()
 		timer.wait_time = cooking_time
+		timer.one_shot = true
 		timer.timeout.connect(_finish_cooking)
 		add_child(timer)
 		timer.start()
@@ -70,5 +70,6 @@ func _finish_cooking() -> void:
 	print("Finished cooking ", current_item.get_item_name(), " at Cooking Station")
 
 func _burn_item() -> void:
-	if has_item() and current_item.is_in_group("cookable"):
-		current_item.burn()
+	pass
+	#if has_item() and current_item.is_in_group("cookable"):
+	#	current_item.burn()
