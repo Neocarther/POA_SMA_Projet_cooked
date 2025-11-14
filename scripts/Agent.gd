@@ -99,6 +99,7 @@ enum State {
 	IDLE,
 	INTERACTING,
 	MOVING,
+	CUTTING,
 }
 
 signal order_completed(recipe)
@@ -148,6 +149,15 @@ func _process(_delta: float) -> void:
 				order_completed.emit(recipe)
 				ready_to_serve = false
 				state = State.IDLE
+		
+		State.CUTTING:
+			_try_interact()
+			if held_item != null:
+				if held_item.get_item_name() == next_ingredient_and_state:
+					if previous_item != "":
+						_combine_items()
+					else:
+						_get_next_Ingredient()
 
 func _get_next_Ingredient() -> void:
 	next_ingredient_and_state = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
@@ -163,7 +173,7 @@ func _get_next_Ingredient() -> void:
 	
 	required_ingredient_name = next_ingredient_and_state.split("_")[0]
 	required_ingredient_state = next_ingredient_and_state.split("_")[1]
-	if held_item == null || required_ingredient_state == "base":
+	if held_item == null and required_ingredient_state == "base":
 		_fetch_ingredient()
 		print("fetching...")
 	else:

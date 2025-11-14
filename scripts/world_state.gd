@@ -19,13 +19,17 @@ func get_closest_element(group_name, reference: Node, content = null) -> Vector2
 	for element in elements:
 		if content != null and element is Station:
 			var station_content = element.current_item
+			if station_content == null:
+				continue
 			if content is String or content is StringName:
 				if content != station_content.get_item_name():
 					print(content + " " + station_content.get_item_name())
 					continue
 			elif content is Item and content.get_item_name() != station_content.get_item_name():
 				continue
-				
+		elif content == null and element is Station and element.current_item != null:
+			continue
+
 		var distance = reference.global_position.distance_to(element.global_position)
 		if distance < closest_distance:
 			closest_distance = distance
