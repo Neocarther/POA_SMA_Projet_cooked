@@ -15,52 +15,56 @@
 [ext_resource type="Resource" uid="uid://b4wbqqjpc8fsa" path="res://resources/ingredients/cheese.tres" id="12_a8y0u"]
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_trceg"]
-vertices = PackedVector2Array(1046, 542, 106, 542, 106, 234, 1046, 234)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(1056, 488, 1056, 552, 96, 552, 96, 224, 1056, 224)])
+vertices = PackedVector2Array(1132, 100, 1132, 377.1328, 1039.25, 377.1328, 688.75, 238.88281, 688.75, 113.13281, 20, 100, 175.25, 113.13281, 20, 273.1328, 175.25, 238.88281, 112.75, 273.1328, 1039.25, 502.8828, 1132, 502.8828, 1132, 628, 856.75, 628, 856.75, 537.1328, 727.25, 537.1328, 727.25, 628, 304.75, 628, 304.75, 537.1328, 175.25, 537.1328, 175.25, 628, 20, 628, 20, 494.8828, 112.75, 494.8828)
+polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3, 4), PackedInt32Array(5, 0, 4, 6), PackedInt32Array(7, 5, 6, 8, 9), PackedInt32Array(10, 11, 12, 13, 14), PackedInt32Array(15, 16, 17, 18, 3), PackedInt32Array(19, 20, 21, 22, 23), PackedInt32Array(3, 2, 10, 14, 15), PackedInt32Array(8, 3, 18, 19, 23, 9)])
+outlines = Array[PackedVector2Array]([PackedVector2Array(0, 80, 0, 648, 1152, 648, 1152, 80)])
+source_geometry_mode = 1
+agent_radius = 20.0
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_sugp2")
 
 [node name="Ui" parent="." instance=ExtResource("4_tbgi4")]
 
-[node name="ServingStation" parent="." instance=ExtResource("2_0wfyh")]
-position = Vector2(1104, 440)
-
-[node name="CookingStation" parent="." instance=ExtResource("4_ya4ey")]
-position = Vector2(432, 176)
-
-[node name="CounterStation" parent="." instance=ExtResource("5_eb6dy")]
-position = Vector2(528, 176)
-
-[node name="IngredientStation" parent="." instance=ExtResource("6_trceg")]
-position = Vector2(240, 176)
-ingredient_data = ExtResource("7_a8y0u")
-
-[node name="CuttingStation" parent="." instance=ExtResource("8_jkv2x")]
-position = Vector2(624, 176)
-
-[node name="CounterStation2" parent="." instance=ExtResource("5_eb6dy")]
-position = Vector2(336, 176)
-
-[node name="IngredientStation2" parent="." instance=ExtResource("6_trceg")]
-position = Vector2(48, 336)
-ingredient_data = ExtResource("9_jbj1t")
-
-[node name="IngredientStation3" parent="." instance=ExtResource("6_trceg")]
-position = Vector2(48, 432)
-ingredient_data = ExtResource("10_eb6dy")
-
-[node name="IngredientStation4" parent="." instance=ExtResource("6_trceg")]
-position = Vector2(240, 600)
-ingredient_data = ExtResource("11_trceg")
-
-[node name="IngredientStation5" parent="." instance=ExtResource("6_trceg")]
-position = Vector2(792, 600)
-ingredient_data = ExtResource("12_a8y0u")
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
+navigation_polygon = SubResource("NavigationPolygon_trceg")
 
 [node name="Agent" parent="." instance=ExtResource("5_tbgi4")]
 position = Vector2(248, 328)
 
-[node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
-navigation_polygon = SubResource("NavigationPolygon_trceg")
+[node name="Stations" type="Node2D" parent="." groups=["navigation_polygon_source_geometry_group"]]
+
+[node name="ServingStation" parent="Stations" instance=ExtResource("2_0wfyh")]
+position = Vector2(1104, 440)
+
+[node name="CookingStation" parent="Stations" instance=ExtResource("4_ya4ey")]
+position = Vector2(432, 176)
+
+[node name="CounterStation" parent="Stations" instance=ExtResource("5_eb6dy")]
+position = Vector2(528, 176)
+
+[node name="IngredientStation" parent="Stations" instance=ExtResource("6_trceg")]
+position = Vector2(240, 176)
+ingredient_data = ExtResource("7_a8y0u")
+
+[node name="CuttingStation" parent="Stations" instance=ExtResource("8_jkv2x")]
+position = Vector2(624, 176)
+
+[node name="CounterStation2" parent="Stations" instance=ExtResource("5_eb6dy")]
+position = Vector2(336, 176)
+
+[node name="IngredientStation2" parent="Stations" instance=ExtResource("6_trceg")]
+position = Vector2(48, 336)
+ingredient_data = ExtResource("9_jbj1t")
+
+[node name="IngredientStation3" parent="Stations" instance=ExtResource("6_trceg")]
+position = Vector2(48, 432)
+ingredient_data = ExtResource("10_eb6dy")
+
+[node name="IngredientStation4" parent="Stations" instance=ExtResource("6_trceg")]
+position = Vector2(240, 600)
+ingredient_data = ExtResource("11_trceg")
+
+[node name="IngredientStation5" parent="Stations" instance=ExtResource("6_trceg")]
+position = Vector2(792, 600)
+ingredient_data = ExtResource("12_a8y0u")
