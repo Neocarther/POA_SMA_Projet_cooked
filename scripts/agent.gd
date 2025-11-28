@@ -126,8 +126,8 @@ var cooking_item: String
 
 # ------------------- New Logic here-----------------------
 var current_blackboard: BlackBoard
-
-# ---------------------------------------------------------
+var combine_to_plated_meal: bool = false
+var need_to_idle: bool = false
 
 func _process(_delta: float) -> void:
 	interaction_interval += _delta
@@ -137,7 +137,13 @@ func _process(_delta: float) -> void:
 		interaction_interval = 0.0
 	match state:
 		State.IDLE:
-			recipe = _WorldState.get_recipe()
+			if current_blackboard != null and current_blackboard.nb_of_agents_on_task < 2:
+				_get_next_step()
+			elif current_blackboard != null:
+				current_blackboard.agents_tasks.erase(self.id)
+				current_blackboard.nb_of_agents_on_task -= 1
+			
+			current_blackboard = _WorldState.get_recipe(self.id)
 			_get_next_step()
 		
 		State.MOVING:
@@ -148,11 +154,12 @@ func _process(_delta: float) -> void:
 			_try_interact()
 			if held_item == null and need_fetch:
 				_fetch_ingredient()
-			elif held_item != null and (held_item.get_item_name() == required_ingredient or item_cooking) and previous_item != "":
-				_combine_items()
-				item_cooking = false
-			elif get_last_ingredient_string_name(held_item) == required_ingredient and previous_item == "":
-				_get_next_step()
+			elif get_last_ingredient_string_name(held_item) == required_ingredient and current_blackboard.is_next_required_ingredient(self.id):
+				if current_blackboard.is_plated_meal_stored():
+					combine_to_plated_meal = true
+					_combine_items()
+				else:
+					_store_item()
 			elif held_item is Ingredient and held_item.data.name == required_ingredient_name and held_item.get_state() != required_ingredient_state :
 				_get_next_station()
 			elif held_item == null and item_cooking:
@@ -161,9 +168,17 @@ func _process(_delta: float) -> void:
 				order_completed.emit(recipe)
 				order_served = false
 				state = State.IDLE
+			elif need_to_idle:
+				need_to_idle = false
+				state = State.IDLE
+			elif combine_to_plated_meal == true:
+				combine_to_plated_meal = false
+				current_blackboard.current_nb_ingredients += 1
+				state = State.IDLE
+				
 
 func _get_next_step() -> void:
-	required_ingredient = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
+	required_ingredient = current_blackboard.get_next_ingredient(self.id)
 	print(required_ingredient)
 	if required_ingredient == "":
 		state = State.IDLE  # No more ingredients, go back to idle state
@@ -173,14 +188,12 @@ func _get_next_step() -> void:
 		order_served = true
 		state = State.MOVING
 		return
-	
+		
 	required_ingredient_name = required_ingredient.split("_")[0]
 	required_ingredient_state = required_ingredient.split("_")[1]
 	if held_item == null:
-		print("fetching...")
 		_fetch_ingredient()
 	else:
-		previous_item = held_item.get_item_name()
 		set_movement_target(_WorldState.get_closest_element("counter_station", self))
 		need_fetch = true
 		state = State.MOVING
@@ -191,16 +204,23 @@ func _fetch_ingredient() -> void:
 	state = State.MOVING
 
 func _combine_items() -> void:
-	if previous_item != "":
-		var pos1 = _WorldState.get_closest_element("counter_station", self, previous_item)
-		var pos2 = _WorldState.get_closest_element("cooking_station", self, previous_item)
-		if self.global_position.distance_to(pos1) > 10 and self.global_position.distance_to(pos1) < self.global_position.distance_to(pos2) or self.global_position.distance_to(pos2) < 10:
-			set_movement_target(pos1)
-		else:
-			set_movement_target(pos2)
-		previous_item = ""
+	var target_position: Vector2
+	if combine_to_plated_meal:
+		target_position = current_blackboard.plated_meal_location
+	set_movement_target(target_position)
+	state = State.MOVING
+
+func _store_item() -> void:
+	var target_position = _WorldState.get_closest_element("counter_station", self)
+	if target_position == self.global_position:
+		print("Agent %d waiting for available counter station to store item" % id)
+		_store_item()
+	else:
+		need_to_idle = true
+		set_movement_target(target_position)
 		state = State.MOVING
 
+#Done
 func _get_next_station() -> void:
 	var group: String
 	if held_item is Ingredient:
@@ -214,13 +234,6 @@ func _get_next_station() -> void:
 		set_movement_target(_WorldState.get_closest_element(group, self))
 		state = State.MOVING
 
-func _fetch_cooking_item() -> void:
-	set_movement_target(_WorldState.get_closest_element("interactable", self, previous_item))
-	previous_item = cooking_item
-	print(previous_item, cooking_item)
-	print(item_cooking)
-	state = State.MOVING
-
 func get_last_ingredient_string_name(element) -> StringName:
 	var last_element
 	if (element is Ingredient):
@@ -232,3 +245,96 @@ func get_last_ingredient_string_name(element) -> StringName:
 	else:
 		return ""
 	return StringName(last_element.get_item_name())
+# ---------------------------------------------------------
+
+#func _process(_delta: float) -> void:
+	#interaction_interval += _delta
+	#if interaction_interval <= 0.3:
+		#return
+	#else:
+		#interaction_interval = 0.0
+	#match state:
+		#State.IDLE:
+			#recipe = _WorldState.get_recipe()
+			#_get_next_step()
+		#
+		#State.MOVING:
+			#if navigation_agent.is_navigation_finished():
+				#state = State.INTERACTING
+		#
+		#State.INTERACTING:
+			#_try_interact()
+			#if held_item == null and need_fetch:
+				#_fetch_ingredient()
+			#elif held_item != null and (held_item.get_item_name() == required_ingredient or item_cooking) and previous_item != "":
+				#_combine_items()
+				#item_cooking = false
+			#elif get_last_ingredient_string_name(held_item) == required_ingredient and previous_item == "":
+				#_get_next_step()
+			#elif held_item is Ingredient and held_item.data.name == required_ingredient_name and held_item.get_state() != required_ingredient_state :
+				#_get_next_station()
+			#elif held_item == null and item_cooking:
+				#_fetch_cooking_item()
+			#elif order_served == true:
+				#order_completed.emit(recipe)
+				#order_served = false
+				#state = State.IDLE
+
+#func _get_next_step() -> void:
+	#required_ingredient = _RecipeManager.get_next_ingredient(recipe, get_last_ingredient_string_name(held_item))
+	#print(required_ingredient)
+	#if required_ingredient == "":
+		#state = State.IDLE  # No more ingredients, go back to idle state
+		#return
+	#elif required_ingredient == "recipe_complete":
+		#set_movement_target(_WorldState.get_closest_element("serving_station", self))
+		#order_served = true
+		#state = State.MOVING
+		#return
+	#
+	#required_ingredient_name = required_ingredient.split("_")[0]
+	#required_ingredient_state = required_ingredient.split("_")[1]
+	#if held_item == null:
+		#print("fetching...")
+		#_fetch_ingredient()
+	#else:
+		#previous_item = held_item.get_item_name()
+		#set_movement_target(_WorldState.get_closest_element("counter_station", self))
+		#need_fetch = true
+		#state = State.MOVING
+
+#func _fetch_ingredient() -> void:
+	#set_movement_target(_WorldState.get_closest_element("ingredient_station", self, required_ingredient_name + "_base"))
+	#need_fetch = false
+	#state = State.MOVING
+
+#func _combine_items() -> void:
+	#if previous_item != "":
+		#var pos1 = _WorldState.get_closest_element("counter_station", self, previous_item)
+		#var pos2 = _WorldState.get_closest_element("cooking_station", self, previous_item)
+		#if self.global_position.distance_to(pos1) > 10 and self.global_position.distance_to(pos1) < self.global_position.distance_to(pos2) or self.global_position.distance_to(pos2) < 10:
+			#set_movement_target(pos1)
+		#else:
+			#set_movement_target(pos2)
+		#previous_item = ""
+		#state = State.MOVING
+
+#func _get_next_station() -> void:
+	#var group: String
+	#if held_item is Ingredient:
+		#match held_item.state:
+			#Ingredient.State.BASE:
+				#group = "cutting_station"
+			#Ingredient.State.CUT:
+				#group = "cooking_station"
+				#item_cooking = true
+				#cooking_item = held_item.get_item_name()
+		#set_movement_target(_WorldState.get_closest_element(group, self))
+		#state = State.MOVING
+
+func _fetch_cooking_item() -> void:
+	set_movement_target(_WorldState.get_closest_element("interactable", self, previous_item))
+	previous_item = cooking_item
+	print(previous_item, cooking_item)
+	print(item_cooking)
+	state = State.MOVING

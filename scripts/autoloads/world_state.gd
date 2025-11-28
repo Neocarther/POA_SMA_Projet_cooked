@@ -1,9 +1,10 @@
 extends Node
 class_name WorldState
 
-var _task_list: Dictionary
+var _task_list: Dictionary[StringName, Timer]
 
 var blackboards: Array[BlackBoard]
+var blackboard_id_count: int = 0
 var nb_free_counters: int = 0
 
 ## Get closest element in group_name from reference in the world space
@@ -41,17 +42,39 @@ func get_closest_element(group_name: StringName, reference: Node, content = null
 	return closest_element.global_position
 
 ## Called by agent to get a recipe to work on
-func get_recipe() -> StringName:
+func get_recipe(agent_id: int):
+	var selected_task
+	var biggest_ingredient_per_second_ratio = 0
+	if _task_list.size() == 0 and blackboards.size() == 0:
+		return ""
 	if _task_list.size() != 0:
-		var recipe = _task_list.keys()[0]
-		_task_list.erase(recipe)
-		return recipe
+		for recipe in _task_list.keys():
+			if _RecipeManager.get_recipe_size(recipe) > nb_free_counters:
+				continue
+			var ingredient_per_second_ratio = _task_list[recipe].time_left / _RecipeManager.get_recipe_size(recipe)
+			if ingredient_per_second_ratio > biggest_ingredient_per_second_ratio:
+				biggest_ingredient_per_second_ratio = ingredient_per_second_ratio
+				selected_task = recipe
+	if blackboards.size() != 0:
+		for blackboard in blackboards:
+			var ingredient_per_second_ratio = blackboard.number_of_ingredients_left() / (blackboard.get_time_left() * blackboard.nb_of_agents_on_task)
+			if ingredient_per_second_ratio > biggest_ingredient_per_second_ratio:
+				biggest_ingredient_per_second_ratio = ingredient_per_second_ratio
+				selected_task = blackboard
+	if selected_task is StringName:
+		var new_blackboard = BlackBoard.new(selected_task, _task_list[selected_task], agent_id, blackboard_id_count)
+		_task_list.erase(selected_task)
+		blackboard_id_count += 1
+		blackboards.append(new_blackboard)
+		return new_blackboard
+	elif selected_task is BlackBoard:
+		return selected_task
 	else:
 		return ""
 
 ## Called by main when new recipe is generated
-func add_task(recipe: StringName, time: float) -> void:
-	_task_list[recipe] = time
+func add_task(recipe: StringName, order_timer: Timer) -> void:
+	_task_list[recipe] = order_timer
 
 func item_added_on_counter() -> void:
 	nb_free_counters -= 1

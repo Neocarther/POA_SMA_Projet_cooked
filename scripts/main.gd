@@ -30,7 +30,7 @@ func add_random_order() -> void:
 	var new_order = Order.new(order_id, recipe, deadline, self)
 	orders.append(new_order)
 	order_added.emit(new_order)
-	_WorldState.add_task(new_order.recipe_name, new_order.timer.time_left)
+	_WorldState.add_task(new_order.recipe_name, new_order.timer)
 	new_order.order_expired.connect(_on_order_expired)
 
 func update_score_and_objectives(_item: PlatedMeal) -> void:
