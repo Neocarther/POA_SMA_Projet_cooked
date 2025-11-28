@@ -124,6 +124,11 @@ var need_fetch: bool = false
 var item_cooking: bool = false
 var cooking_item: String
 
+# ------------------- New Logic here-----------------------
+var current_blackboard: BlackBoard
+
+# ---------------------------------------------------------
+
 func _process(_delta: float) -> void:
 	interaction_interval += _delta
 	if interaction_interval <= 0.3:

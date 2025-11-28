@@ -2,10 +2,9 @@ extends Node
 class_name WorldState
 
 var _task_list: Dictionary
-var _stations: Dictionary
 
-func register_station(station: Node) -> void:
-	_stations[station.get_instance_id()] = station
+var blackboards: Array[BlackBoard]
+var nb_free_counters: int = 0
 
 ## Get closest element in group_name from reference in the world space
 ## Search can be more specific by giving the content, an elements from group_name
@@ -41,6 +40,7 @@ func get_closest_element(group_name: StringName, reference: Node, content = null
 	print(closest_element.global_position)
 	return closest_element.global_position
 
+## Called by agent to get a recipe to work on
 func get_recipe() -> StringName:
 	if _task_list.size() != 0:
 		var recipe = _task_list.keys()[0]
@@ -49,8 +49,15 @@ func get_recipe() -> StringName:
 	else:
 		return ""
 
+## Called by main when new recipe is generated
 func add_task(recipe: StringName, time: float) -> void:
 	_task_list[recipe] = time
+
+func item_added_on_counter() -> void:
+	nb_free_counters -= 1
+
+func item_taken_from_counter() -> void:
+	nb_free_counters += 1
 
 func _get_elements(group_name: StringName) -> Array[Node]:
 	return self.get_tree().get_nodes_in_group(group_name)
