@@ -50,4 +50,3 @@ func _on_order_completed(recipe: StringName) -> void:
 			orders.erase(order)
 			order_completed.emit(order)
 			return
-	score_updated.emit(0)

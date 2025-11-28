@@ -1,6 +1,6 @@
 [gd_scene load_steps=5 format=3 uid="uid://btdeo2i1xlwrf"]
 
-[ext_resource type="Script" uid="uid://b1chp6yeu3i68" path="res://scripts/Agent.gd" id="1_xhfnw"]
+[ext_resource type="Script" uid="uid://b1chp6yeu3i68" path="res://scripts/agent.gd" id="1_xhfnw"]
 [ext_resource type="Texture2D" uid="uid://clvb3oofbxhbx" path="res://models/cook.png" id="2_7e1ma"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7e1ma"]

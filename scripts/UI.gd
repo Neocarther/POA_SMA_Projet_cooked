@@ -45,7 +45,6 @@ func format_time(seconds: float) -> String:
 func _on_score_updated(score_diff: int) -> void:
 	score += score_diff
 	score_label.text = ""
-	print(score_label.text)
 	if score < 0:
 		score_label.text = "Score : %05d" % score
 	else:

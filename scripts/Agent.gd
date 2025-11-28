@@ -1,22 +1,29 @@
 extends CharacterBody2D
+class_name Agent
 
+@export var id: int ##Id of the Agent
 @export var movement_speed: float = 800.0
+
 @onready var navigation_agent: NavigationAgent2D = $NavigationAgent2D
 @onready var plated_meal_scene = preload("res://scenes/PlatedMeal.tscn")
-var held_item: Item = null
-var nearby_interactables = []
+
+var held_item: Item = null ##Current item held by the agent
+var nearby_interactables: Array[Node] = [] ##Array of interactable elements in range of the Agent
 
 #------ Navigation Code for the Agent to move around the world -------#
+
+func get_agent_id() -> int:
+	return self.id
+
+func set_movement_target(movement_target: Vector2):
+	print("Moving to : ", movement_target)
+	navigation_agent.set_target_position(movement_target)
 
 func _ready() -> void:
 	var agent: RID = navigation_agent.get_rid()
 	# Enable avoidance
 	NavigationServer2D.agent_set_avoidance_enabled(agent, true)
 	navigation_agent.velocity_computed.connect(Callable(_on_velocity_computed))
-
-func set_movement_target(movement_target: Vector2):
-	print("Moving to : ", movement_target)
-	navigation_agent.set_target_position(movement_target)
 
 func _physics_process(_delta: float) -> void:
 	if NavigationServer2D.map_get_iteration_id(navigation_agent.get_navigation_map()) == 0:
@@ -56,7 +63,9 @@ func remove_item() -> Node:
 		held_item = null
 	return removed_item
 
-func get_closest_interactable():
+## Returns the closest interactable node from the list of interactable nodes in range of the agent
+## If no interactable node is in range, returns null
+func get_closest_interactable() -> Node:
 	var closest = null
 	var closest_dist := INF
 	for interactable in nearby_interactables:
@@ -80,7 +89,7 @@ func ingredient_to_meal() -> void:
 		add_child(held_item)
 
 ## Call to interact with an Interactable in range
-func _try_interact():
+func _try_interact() -> void:
 	if not nearby_interactables.is_empty():
 		get_closest_interactable().interact(self)
 
