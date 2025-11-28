@@ -134,3 +134,9 @@ func get_next_ingredient(recipe: StringName, last_ingredient: StringName) -> Str
 		return "recipe_complete"
 	else:
 		return "error"
+
+func get_recipe_ingredient(recipe: StringName, ingredient_number: int) -> StringName:
+	return recipes_list[recipe][ingredient_number]
+
+func get_recipe_size(recipe: StringName) -> int:
+	return recipes_list[recipe].size()
