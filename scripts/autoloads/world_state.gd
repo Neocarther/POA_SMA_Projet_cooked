@@ -1,10 +1,9 @@
 extends Node
 class_name WorldState
 
-var _task_list: Dictionary[StringName, Timer]
+var _order_list: Array[Order]
 
 var blackboards: Array[BlackBoard]
-var blackboard_id_count: int = 0
 var nb_free_counters: int = 0
 
 ## Get closest element in group_name from reference in the world space
@@ -14,7 +13,6 @@ var nb_free_counters: int = 0
 ## int if the element searched for has an id
 func get_closest_element(group_name: StringName, reference: Node, content = null) -> Vector2i:
 	var elements = _get_elements(group_name)
-	print(group_name)
 	var closest_element = reference
 	var closest_distance = INF
 	for element in elements:
@@ -24,7 +22,6 @@ func get_closest_element(group_name: StringName, reference: Node, content = null
 				continue
 			if content is String or content is StringName:
 				if content != station_content.get_item_name():
-					print(content + " " + station_content.get_item_name())
 					continue
 			elif content is Item and content.get_item_name() != station_content.get_item_name():
 				continue
@@ -38,43 +35,45 @@ func get_closest_element(group_name: StringName, reference: Node, content = null
 		if distance < closest_distance:
 			closest_distance = distance
 			closest_element = element
-	print(closest_element.global_position)
 	return closest_element.global_position
 
 ## Called by agent to get a recipe to work on
-func get_recipe(agent_id: int):
-	var selected_task
+func get_recipe():
+	var selected_order
 	var biggest_ingredient_per_second_ratio = 0
-	if _task_list.size() == 0 and blackboards.size() == 0:
+	if _order_list.size() == 0 and blackboards.size() == 0:
 		return ""
-	if _task_list.size() != 0:
-		for recipe in _task_list.keys():
-			if _RecipeManager.get_recipe_size(recipe) > nb_free_counters:
+	if _order_list.size() != 0:
+		for order in _order_list:
+			if _RecipeManager.get_recipe_size(order.recipe_name) > nb_free_counters + 1:
 				continue
-			var ingredient_per_second_ratio = _task_list[recipe].time_left / _RecipeManager.get_recipe_size(recipe)
+			var ingredient_per_second_ratio = order.timer.time_left / _RecipeManager.get_recipe_size(order.recipe_name)
 			if ingredient_per_second_ratio > biggest_ingredient_per_second_ratio:
 				biggest_ingredient_per_second_ratio = ingredient_per_second_ratio
-				selected_task = recipe
+				selected_order = order
 	if blackboards.size() != 0:
 		for blackboard in blackboards:
 			var ingredient_per_second_ratio = blackboard.number_of_ingredients_left() / (blackboard.get_time_left() * blackboard.nb_of_agents_on_task)
 			if ingredient_per_second_ratio > biggest_ingredient_per_second_ratio:
 				biggest_ingredient_per_second_ratio = ingredient_per_second_ratio
-				selected_task = blackboard
-	if selected_task is StringName:
-		var new_blackboard = BlackBoard.new(selected_task, _task_list[selected_task], agent_id, blackboard_id_count)
-		_task_list.erase(selected_task)
-		blackboard_id_count += 1
+				selected_order = blackboard
+	if selected_order is Order:
+		var new_blackboard = BlackBoard.new(selected_order)
+		_order_list.erase(selected_order)
 		blackboards.append(new_blackboard)
 		return new_blackboard
-	elif selected_task is BlackBoard:
-		return selected_task
+	elif selected_order is BlackBoard:
+		selected_order.nb_of_agents_on_task += 1
+		return selected_order
 	else:
 		return ""
 
 ## Called by main when new recipe is generated
-func add_task(recipe: StringName, order_timer: Timer) -> void:
-	_task_list[recipe] = order_timer
+func add_order(order: Order) -> void:
+	_order_list.append(order)
+
+func remove_blackboard(blackboard: BlackBoard) -> void:
+	blackboards.erase(blackboard)
 
 func item_added_on_counter() -> void:
 	nb_free_counters -= 1

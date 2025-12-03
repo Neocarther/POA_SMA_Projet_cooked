@@ -7,7 +7,9 @@ var ingredients: Array[Ingredient]
 func _ready() -> void:
 	_update_sprite()
 
-func can_add(ingredient: Ingredient) -> bool:
+func can_add(ingredient: Variant) -> bool:
+	if not ingredient is Ingredient:
+		return false
 	var ingredient_string_names: Array[StringName] = ["plate_base"]
 	if not ingredients.is_empty():
 		for meal_ingredient in ingredients:

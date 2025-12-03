@@ -3,11 +3,13 @@ class_name RecipeManager
 
 const recipes_folder_path = "res://resources/recipes/"
 
-var sprites = {}
-var recipes_list = {}
+var sprites: Dictionary[StringName, Resource]
+var recipes_list: Dictionary[StringName, Array]
+var recipes_points: Dictionary[StringName, int]
 var rng = RandomNumberGenerator.new()
 
 func _ready() -> void:
+	rng.seed = 66
 	preload_sprites()
 	recipes_list = get_all_recipes(recipes_folder_path)
 
@@ -37,8 +39,8 @@ func preload_sprites():
 ##
 ## Combines the name of each ingredient from the recipe with the state it
 ## should be in for easier comparison with ingredients
-func get_all_recipes(path: String) -> Dictionary:
-	var recipe_list = {}
+func get_all_recipes(path: String) -> Dictionary[StringName, Array]:
+	var recipe_list: Dictionary[StringName, Array]
 	var dir = DirAccess.open(path)
 	if dir:
 		dir.list_dir_begin()
@@ -58,6 +60,7 @@ func get_all_recipes(path: String) -> Dictionary:
 								recipe_list[recipe.name].append(StringName(recipe.ingredients[i] + "_cut"))
 							Ingredient.State.COOKED:
 								recipe_list[recipe.name].append(StringName(recipe.ingredients[i] + "_cooked"))
+					recipes_points[recipe.name] = recipe.points
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	else:
@@ -140,3 +143,6 @@ func get_recipe_ingredient(recipe: StringName, ingredient_number: int) -> String
 
 func get_recipe_size(recipe: StringName) -> int:
 	return recipes_list[recipe].size()
+
+func get_recipe_points(recipe: StringName) -> int:
+	return recipes_points[recipe]

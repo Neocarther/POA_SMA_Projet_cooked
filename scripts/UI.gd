@@ -7,7 +7,7 @@ extends CanvasLayer
 @onready var restart_button = $EndScreen/RestartButton
 @onready var order_container: VBoxContainer = $OrderContainer
 
-var game_time = 180.0  # en secondes (3 min)
+var game_time = 120.0  # en secondes
 var score = 0
 var order_labels = {}
 
@@ -54,6 +54,7 @@ func _on_order_added(order: Order) -> void:
 	var new_order_label: Label = Label.new()
 	new_order_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	order_container.add_child(new_order_label)
+	new_order_label.add_theme_color_override('font_color', Color())
 	order_labels[new_order_label] = order
 
 func _update_order_timer(order_label: Label, order: Order) -> void:
@@ -72,7 +73,9 @@ func _on_order_completed(order: Order) -> void:
 # -------- Fin de partie --------
 func _on_game_over():
 	end_screen.visible = true
-	end_message.text = "Fin de la partie !\nScore final : %d" % score
+	end_message.text = "Fin de la partie !\nMerci d'avoir joué !\nScore final : %d" % score
 
 func _on_restart_pressed():
+	_WorldState._order_list.clear()
+	_WorldState.blackboards.clear()
 	get_tree().reload_current_scene()

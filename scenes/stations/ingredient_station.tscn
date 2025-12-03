@@ -17,6 +17,10 @@ metadata/_custom_type_script = "uid://c3ommkr6l47rw"
 texture = ExtResource("2_bwk3m")
 
 [node name="Ingredient" type="Sprite2D" parent="Counter"]
+modulate = Color(1, 1, 1, 0.8235294)
+texture_filter = 1
+position = Vector2(0, -10)
+scale = Vector2(3, 3)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_sd1i1")

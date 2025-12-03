@@ -4,6 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://taybuu0hp4oh" path="res://models/plate.png" id="2_pwai8"]
 
 [node name="PlatedMeal" type="Node2D"]
+texture_filter = 1
+scale = Vector2(2, 2)
 script = ExtResource("1_bpsqn")
 
 [node name="Meal" type="Sprite2D" parent="."]

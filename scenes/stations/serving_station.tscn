@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://bx6xhlenoqvuq"]
 
 [ext_resource type="Script" uid="uid://dgam8nmc5rvne" path="res://scripts/stations/serving_station.gd" id="1_hf3di"]
-[ext_resource type="Texture2D" uid="uid://pxdm4ta5bwgl" path="res://models/ingredient_box.png" id="2_8fn2u"]
+[ext_resource type="Texture2D" uid="uid://hv0dib8cskq7" path="res://models/serving_station.png" id="2_8fn2u"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fg7o6"]
 size = Vector2(89.5, 85.75)

@@ -4,15 +4,17 @@
 [ext_resource type="Texture2D" uid="uid://clvb3oofbxhbx" path="res://models/cook.png" id="2_7e1ma"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_7e1ma"]
-radius = 24.33105
+radius = 16.492422
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_p0vlq"]
 radius = 79.30952
 
 [node name="Agent" type="CharacterBody2D"]
+collision_mask = 2
 script = ExtResource("1_xhfnw")
 
 [node name="Sprite" type="Sprite2D" parent="."]
+texture_filter = 1
 scale = Vector2(2, 2)
 texture = ExtResource("2_7e1ma")
 
@@ -26,7 +28,10 @@ shape = SubResource("CircleShape2D_7e1ma")
 shape = SubResource("CircleShape2D_p0vlq")
 
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-debug_enabled = true
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
 
 [connection signal="area_entered" from="InteractionArea" to="." method="_on_interaction_area_entered"]
 [connection signal="area_exited" from="InteractionArea" to="." method="_on_interaction_area_exited"]

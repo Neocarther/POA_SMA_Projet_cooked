@@ -7,4 +7,5 @@ script = ExtResource("1_lswh2")
 name = &"Steak"
 ingredients = Array[String](["plate", "steak"])
 states = Array[int]([0, 2])
+points = 20
 metadata/_custom_type_script = "uid://8uswu7udqj30"

@@ -10,11 +10,8 @@ func interact(agent) -> void:
 	elif agent.item_type() == "PlatedMeal":
 		receive_item(agent)
 		if current_item.is_complete():
-			var parent = get_parent()
-			if parent.has_method("update_score_and_objectives"):
-				parent.update_score_and_objectives(current_item)
-				remove_child(current_item)
-				current_item = null
+			remove_child(current_item)
+			current_item = null
 		else:
 			give_item(agent)
 	else:

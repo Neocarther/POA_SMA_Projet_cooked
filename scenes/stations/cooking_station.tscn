@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://c86ly0sc60eb1"]
+[gd_scene load_steps=5 format=3 uid="uid://c86ly0sc60eb1"]
 
 [ext_resource type="Script" uid="uid://cmtqpsx2iyt2g" path="res://scripts/stations/cooking_station.gd" id="1_fg7o6"]
-[ext_resource type="Texture2D" uid="uid://pxdm4ta5bwgl" path="res://models/ingredient_box.png" id="2_smuha"]
 [ext_resource type="Texture2D" uid="uid://csh5q65lp4vgu" path="res://models/pan_off.png" id="3_oulr1"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fg7o6"]
@@ -14,10 +13,7 @@ radius = 88.0
 script = ExtResource("1_fg7o6")
 metadata/_custom_type_script = "uid://c3ommkr6l47rw"
 
-[node name="Counter" type="Sprite2D" parent="."]
-texture = ExtResource("2_smuha")
-
-[node name="Pan" type="Sprite2D" parent="Counter"]
+[node name="Pan" type="Sprite2D" parent="."]
 texture = ExtResource("3_oulr1")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

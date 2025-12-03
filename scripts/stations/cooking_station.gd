@@ -1,7 +1,7 @@
 extends Station
 
 @onready var progress_bar: ProgressBar = $ProgressBar
-@onready var pan: Sprite2D = $Counter/Pan
+@onready var pan: Sprite2D = $Pan
 const PAN_OFF = preload("uid://csh5q65lp4vgu")
 const PAN_ON = preload("uid://b1rdgfdwdc48i")
 
@@ -47,6 +47,7 @@ func _start_cooking() -> void:
 	if has_item() and not is_cooking:
 		is_cooking = true
 		pan.texture = PAN_ON
+		current_item.global_position.y -= 10
 		#Create timer for the cooking time
 		var timer = Timer.new()
 		timer.wait_time = cooking_time

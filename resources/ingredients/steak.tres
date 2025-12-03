@@ -1,16 +1,16 @@
 [gd_resource type="Resource" script_class="IngredientData" load_steps=5 format=3 uid="uid://icw3hsyadxev"]
 
 [ext_resource type="Script" uid="uid://tqapocf1fqvc" path="res://resources/ingredient_data.gd" id="1_41k33"]
-[ext_resource type="Texture2D" uid="uid://cw6dsup5tsjub" path="res://models/steak_raw.png" id="1_bv5c8"]
 [ext_resource type="Texture2D" uid="uid://blf64pqr5wytb" path="res://models/steak_cooked.png" id="2_tca8e"]
 [ext_resource type="Texture2D" uid="uid://cm1c3oujswkqj" path="res://models/steak.png" id="3_0flso"]
+[ext_resource type="Texture2D" uid="uid://cw7yqsq5jtmec" path="res://models/steak_cut.png" id="3_t6abr"]
 
 [resource]
 script = ExtResource("1_41k33")
 name = "steak"
 cuttable = true
 cookable = true
-base_texture = ExtResource("1_bv5c8")
-cut_texture = ExtResource("3_0flso")
+base_texture = ExtResource("3_0flso")
+cut_texture = ExtResource("3_t6abr")
 cooked_texture = ExtResource("2_tca8e")
 metadata/_custom_type_script = "uid://tqapocf1fqvc"

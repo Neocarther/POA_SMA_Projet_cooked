@@ -1,7 +1,6 @@
-[gd_scene load_steps=6 format=3 uid="uid://cf2jhubpgh6w"]
+[gd_scene load_steps=5 format=3 uid="uid://cf2jhubpgh6w"]
 
 [ext_resource type="Script" uid="uid://bgspv8smgpbcf" path="res://scripts/stations/cutting_station.gd" id="1_s5h3g"]
-[ext_resource type="Texture2D" uid="uid://pxdm4ta5bwgl" path="res://models/ingredient_box.png" id="2_fwyh5"]
 [ext_resource type="Texture2D" uid="uid://bpllwfe61uari" path="res://models/cutting_board.png" id="2_s7yq8"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_fwyh5"]
@@ -14,10 +13,7 @@ radius = 88.0
 script = ExtResource("1_s5h3g")
 metadata/_custom_type_script = "uid://c3ommkr6l47rw"
 
-[node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_fwyh5")
-
-[node name="ChoppingBoard" type="Sprite2D" parent="Sprite2D"]
+[node name="ChoppingBoard" type="Sprite2D" parent="."]
 texture = ExtResource("2_s7yq8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]

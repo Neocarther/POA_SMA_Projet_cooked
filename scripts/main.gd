@@ -9,11 +9,10 @@ var order_counter: int = 0
 var time_elapsed: float = 0.0
 var time_between_orders: float = 10.0
 
-@onready var agent: CharacterBody2D = $Agent
-
 func _ready() -> void:
-	if agent:
-		agent.order_completed.connect(_on_order_completed)
+	for child in get_children():
+		if child is CharacterBody2D:
+			child.order_completed.connect(_on_order_completed)
 	add_random_order()
 
 func _process(delta: float) -> void:
@@ -30,23 +29,22 @@ func add_random_order() -> void:
 	var new_order = Order.new(order_id, recipe, deadline, self)
 	orders.append(new_order)
 	order_added.emit(new_order)
-	_WorldState.add_task(new_order.recipe_name, new_order.timer)
+	_WorldState.add_order(new_order)
 	new_order.order_expired.connect(_on_order_expired)
-
-func update_score_and_objectives(_item: PlatedMeal) -> void:
-	score_updated.emit(10)
 
 ## Return a random time between 30s and 90s needed to complete the order as an integer
 func _get_random_deadline() -> int:
-	return 30 + randi() % 30
+	return 30 + _RecipeManager.rng.randi() % 30
 
 func _on_order_expired(order: Order):
 	orders.erase(order)
 	score_updated.emit(-5)
 
-func _on_order_completed(recipe: StringName) -> void:
+func _on_order_completed(blackboard: BlackBoard) -> void:
+	var recipe = blackboard.recipe
 	for order in orders:
-		if order.recipe_name == recipe:
+		if order.id == blackboard.id:
 			orders.erase(order)
+			score_updated.emit(_RecipeManager.get_recipe_points(recipe))
 			order_completed.emit(order)
 			return
